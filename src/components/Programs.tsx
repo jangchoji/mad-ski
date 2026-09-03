@@ -73,7 +73,7 @@ export function Programs() {
                 DIRECTOR
               </span>
             )}
-            <span className="font-display text-2xl tracking-widest text-snow md:text-3xl">
+            <span className="font-display-kr text-3xl text-snow md:text-4xl">
               {p.tag}
             </span>
             <p className="mt-1 text-xs text-neon-amber md:text-sm">

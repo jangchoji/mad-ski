@@ -17,7 +17,7 @@ const CHANNELS = [
   {
     label: "YOUTUBE",
     value: "장초지TV",
-    href: "https://youtube.com/@장초지TV",
+    href: "https://www.youtube.com/channel/UCZRwm9Z2AtsQqPTsI6_slwQ",
   },
 ];
 
@@ -66,7 +66,13 @@ export function Contact() {
                   <span className="text-[10px] font-semibold tracking-[0.35em] text-snow-muted">
                     {c.label}
                   </span>
-                  <span className="mt-1 font-display text-lg tracking-wider text-snow group-hover:text-neon-orange md:mt-6 md:text-xl">
+                  <span
+                    className={
+                      /[가-힯]/.test(c.value)
+                        ? "font-display-kr mt-1 text-xl text-snow group-hover:text-neon-orange md:mt-6 md:text-2xl"
+                        : "font-display mt-1 text-lg tracking-wider text-snow group-hover:text-neon-orange md:mt-6 md:text-xl"
+                    }
+                  >
                     {c.value}
                   </span>
                 </div>

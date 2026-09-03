@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Monoton } from "next/font/google";
+import { Archivo_Black, Inter } from "next/font/google";
 import "./globals.css";
 
-const monoton = Monoton({
+const archivo = Archivo_Black({
   weight: "400",
-  variable: "--font-monoton",
+  variable: "--font-archivo-black",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -17,7 +23,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${monoton.variable} h-full antialiased`}>
+    <html
+      lang="ko"
+      className={`${archivo.variable} ${inter.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

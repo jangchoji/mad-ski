@@ -2,29 +2,41 @@
 @import "tailwindcss";
 
 /*
- * CONCEPT C — NEON RIDGE
- * Y2K · 사이버 스키. 딥 퍼플-블랙 + 블레이징 오렌지 & 아이스 시안 이중 네온.
+ * CONCEPT D — EDITORIAL WHITE
+ * 화이트 · 블랙 · 블러드 오렌지 원 포인트.
+ * Bebas Neue + Inter/Pretendard. 편집형 미니멀.
  */
 @theme inline {
   /* Surface */
-  --color-midnight: #0d0221;         /* deep purple-black */
-  --color-midnight-elev: #170a34;    /* raised violet */
-  --color-midnight-card: #1c0d40;    /* card deep purple */
-  --color-midnight-border: #3a1f7a;  /* violet border */
+  --color-midnight: #ffffff;        /* base — pure white */
+  --color-midnight-elev: #f6f4ef;   /* warm off-white — section break */
+  --color-midnight-card: #ffffff;   /* card white */
+  --color-midnight-border: #0a0a0a; /* editorial black hairline */
 
-  /* Brand — dual neon */
-  --color-neon-orange: #ff3d00; /* PRIMARY · blazing orange */
-  --color-neon-amber: #00f0ff;  /* SECONDARY · ice cyan */
+  /* Brand — single accent */
+  --color-neon-orange: #ff3b00; /* blood orange */
+  --color-neon-amber: #ff3b00;  /* same accent — one point color */
 
   /* Ink */
-  --color-snow: #ffffff;         /* primary text — pure white */
-  --color-snow-dim: #c4bce6;     /* secondary — lavender */
-  --color-snow-muted: #7c74a8;   /* tertiary — dim violet */
+  --color-snow: #0a0a0a;    /* primary text — near black */
+  --color-snow-dim: #4a4a4a;/* secondary — charcoal */
+  --color-snow-muted: #999999;
 
   --font-sans:
+    "Pretendard Variable", var(--font-inter), Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, "Malgun Gothic", sans-serif;
+  --font-display:
+    var(--font-archivo-black), "Archivo Black", "Pretendard Variable",
+    Pretendard, Impact, "Arial Black", sans-serif;
+}
+
+/* Korean-heavy display: force Pretendard Black for premium feel */
+.font-display-kr {
+  font-family:
     "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, "Malgun Gothic", sans-serif;
-  --font-display: var(--font-monoton), Impact, sans-serif;
+    sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.015em;
 }
 
 html {
@@ -38,62 +50,28 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Neon glow text (dual) --- */
+/* "neon" utility classes → flat brand color helpers */
 .neon-orange {
-  color: #fff;
-  text-shadow:
-    0 0 4px #fff,
-    0 0 12px rgba(255, 61, 0, 0.95),
-    0 0 30px rgba(255, 61, 0, 0.8),
-    0 0 60px rgba(255, 61, 0, 0.5);
+  color: var(--color-neon-orange);
 }
-
 .neon-amber {
-  color: #fff;
-  text-shadow:
-    0 0 4px #fff,
-    0 0 12px rgba(0, 240, 255, 0.95),
-    0 0 30px rgba(0, 240, 255, 0.75),
-    0 0 60px rgba(0, 240, 255, 0.45);
+  color: var(--color-neon-amber);
 }
-
-@keyframes neon-flicker {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  91% {
-    opacity: 1;
-  }
-  92% {
-    opacity: 0.65;
-  }
-  93% {
-    opacity: 1;
-  }
-  95% {
-    opacity: 0.85;
-  }
-  96% {
-    opacity: 1;
-  }
-}
-
 .neon-flicker {
-  animation: neon-flicker 5s infinite;
+  animation: none;
 }
 
-/* --- Snow particles — white with cyan halo (data crystals) --- */
+/* Snow — soft gray specks, barely there */
 @keyframes snowfall {
   0% {
     transform: translate3d(0, -10vh, 0) rotate(0deg);
     opacity: 0;
   }
-  8% {
+  10% {
     opacity: 1;
   }
-  92% {
-    opacity: 0.9;
+  90% {
+    opacity: 0.6;
   }
   100% {
     transform: translate3d(var(--drift, 20px), 110vh, 0) rotate(360deg);
@@ -104,56 +82,37 @@ body {
 .snow {
   position: absolute;
   top: 0;
-  width: var(--size, 4px);
-  height: var(--size, 4px);
-  background: #fff;
+  width: var(--size, 3px);
+  height: var(--size, 3px);
+  background: rgba(10, 10, 10, 0.18);
   border-radius: 50%;
-  box-shadow:
-    0 0 6px rgba(0, 240, 255, 0.9),
-    0 0 12px rgba(0, 240, 255, 0.45);
+  box-shadow: none;
   animation: snowfall linear infinite;
   will-change: transform, opacity;
   pointer-events: none;
 }
 
-/* --- Tron-style slope grid --- */
+/* Slope grid — kill for editorial white */
 .slope-grid {
-  background-image:
-    linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgba(255, 61, 0, 0.08) 55%,
-      transparent 100%
-    ),
-    linear-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.08) 1px, transparent 1px);
-  background-size:
-    100% 100%,
-    60px 60px,
-    60px 60px;
-  mask-image: radial-gradient(
-    ellipse at center,
-    black 30%,
-    transparent 78%
+  background: none;
+}
+
+/* Hero glow — replaced with soft off-white gradient at bottom */
+.hero-glow {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 70%,
+    rgba(246, 244, 239, 0.6) 100%
   );
 }
 
-/* Hero atmospheric glow — dual radial (cyberpunk) */
-.hero-glow {
-  background:
-    radial-gradient(
-      ellipse at 25% 30%,
-      rgba(0, 240, 255, 0.22) 0%,
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse at 75% 70%,
-      rgba(255, 61, 0, 0.28) 0%,
-      transparent 55%
-    );
+/* Kill scanlines (concept C only) */
+.scanlines {
+  background: none;
 }
 
-/* --- Marquee --- */
+/* Marquee */
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -166,48 +125,23 @@ body {
   animation: marquee 40s linear infinite;
 }
 
-/* --- Neon outlined pill button --- */
+/* Neutralize gradient border pill button */
 .btn-neon {
   position: relative;
   isolation: isolate;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.3s ease;
+    transform 0.15s ease,
+    background-color 0.15s ease;
 }
 .btn-neon:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 12px rgba(255, 61, 0, 0.6),
-    0 0 32px rgba(0, 240, 255, 0.35);
+  transform: translateY(-1px);
 }
 .btn-neon::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    var(--color-neon-orange),
-    var(--color-neon-amber),
-    var(--color-neon-orange)
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  z-index: -1;
+  content: none;
 }
 
-/* --- Subtle scanline overlay for hero (Y2K flavor) --- */
-.scanlines {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0) 0px,
-    rgba(255, 255, 255, 0) 3px,
-    rgba(0, 240, 255, 0.025) 3px,
-    rgba(0, 240, 255, 0.025) 4px
-  );
-  pointer-events: none;
+/* Editorial section rule */
+.rule-editorial {
+  height: 1px;
+  background: #0a0a0a;
 }

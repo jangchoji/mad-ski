@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const NAV_ITEMS = [
@@ -12,11 +13,15 @@ export function Navigation() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-midnight-border/60 bg-midnight/70 backdrop-blur-xl">
       <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5 md:h-16 md:px-6">
-        <Link
-          href="/"
-          className="font-display text-base tracking-[0.15em] neon-orange neon-flicker md:text-xl"
-        >
-          MAD_SKI
+        <Link href="/" aria-label="MAD_INTER SKI 홈" className="block">
+          <Image
+            src="/images/logo.jpeg"
+            alt="MAD_INTER SKI"
+            width={700}
+            height={200}
+            priority
+            className="h-6 w-auto md:h-8"
+          />
         </Link>
         <ul className="hidden items-center gap-10 md:flex">
           {NAV_ITEMS.map((item) => (

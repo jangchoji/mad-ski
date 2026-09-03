@@ -3,16 +3,18 @@ import Link from "next/link";
 export function MobileCta() {
   return (
     <div
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-midnight-border bg-midnight/85 backdrop-blur-xl md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-black bg-white/95 backdrop-blur-xl md:hidden"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto max-w-md px-4 py-3">
         <Link
           href="#contact"
-          className="flex h-13 w-full items-center justify-center gap-2 rounded-full bg-neon-orange py-4 text-base font-bold tracking-wide text-white shadow-[0_0_28px_rgba(255,61,0,0.55),0_0_60px_rgba(0,240,255,0.2)] active:scale-[0.98]"
+          className="flex h-13 w-full items-center justify-between gap-2 rounded-none bg-black px-6 py-4 text-base font-bold uppercase tracking-wider text-white active:scale-[0.99]"
         >
-          강습 예약하기
-          <span aria-hidden>→</span>
+          <span>강습 예약하기</span>
+          <span className="text-neon-orange" aria-hidden>
+            →
+          </span>
         </Link>
       </div>
     </div>
