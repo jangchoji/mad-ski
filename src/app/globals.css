@@ -1,26 +1,184 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-midnight: #0a0a0f;
+  --color-midnight-elev: #12121a;
+  --color-midnight-card: #16161f;
+  --color-midnight-border: #24242f;
+  --color-neon-orange: #ff6b1a;
+  --color-neon-amber: #ffb800;
+  --color-snow: #f4f7fb;
+  --color-snow-dim: #a8b0bd;
+  --color-snow-muted: #6b7280;
+
+  --font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Malgun Gothic", sans-serif;
+  --font-display: var(--font-monoton), Impact, sans-serif;
+
+  --shadow-neon:
+    0 0 8px rgba(255, 107, 26, 0.6), 0 0 24px rgba(255, 107, 26, 0.35),
+    0 0 48px rgba(255, 107, 26, 0.2);
+  --shadow-neon-amber:
+    0 0 8px rgba(255, 184, 0, 0.55), 0 0 24px rgba(255, 184, 0, 0.3);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-midnight);
+  color: var(--color-snow);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* --- Neon glow --- */
+.neon-orange {
+  color: #fff;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 12px rgba(255, 107, 26, 0.95),
+    0 0 28px rgba(255, 107, 26, 0.75),
+    0 0 48px rgba(255, 107, 26, 0.45);
+}
+
+.neon-amber {
+  color: #fff;
+  text-shadow:
+    0 0 4px #fff,
+    0 0 12px rgba(255, 184, 0, 0.9),
+    0 0 28px rgba(255, 184, 0, 0.55);
+}
+
+@keyframes neon-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.72;
+  }
+  94% {
+    opacity: 1;
+  }
+  96% {
+    opacity: 0.85;
+  }
+  97% {
+    opacity: 1;
+  }
+}
+
+.neon-flicker {
+  animation: neon-flicker 6s infinite;
+}
+
+/* --- Snowfall --- */
+@keyframes snowfall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(var(--drift, 20px), 110vh, 0) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.snow {
+  position: absolute;
+  top: 0;
+  width: var(--size, 4px);
+  height: var(--size, 4px);
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.75);
+  animation: snowfall linear infinite;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* --- Slope grid backdrop --- */
+.slope-grid {
+  background-image:
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(255, 107, 26, 0.06) 60%,
+      transparent 100%
+    ),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 60px 60px, 60px 60px;
+  mask-image: radial-gradient(
+    ellipse at center,
+    black 30%,
+    transparent 75%
+  );
+}
+
+.hero-glow {
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    rgba(255, 107, 26, 0.28) 0%,
+    rgba(255, 107, 26, 0.08) 25%,
+    transparent 60%
+  );
+}
+
+/* --- Marquee --- */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+
+/* --- Neon outlined button --- */
+.btn-neon {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.3s ease;
+}
+.btn-neon:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-neon);
+}
+.btn-neon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--color-neon-orange),
+    var(--color-neon-amber),
+    var(--color-neon-orange)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
 }
