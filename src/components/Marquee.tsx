@@ -38,16 +38,23 @@ export function Marquee() {
               >
                 {p}
               </span>
-              <span
-                aria-hidden
-                className="font-display text-lg text-neon-orange md:text-2xl"
-              >
-                ✳
-              </span>
+              <StarSeparator />
             </span>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function StarSeparator() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="inline-block h-4 w-4 shrink-0 fill-neon-orange md:h-6 md:w-6"
+      aria-hidden
+    >
+      <path d="M12 1.5L13.35 9.65L21.5 11L13.35 12.35L12 20.5L10.65 12.35L2.5 11L10.65 9.65L12 1.5Z" />
+    </svg>
   );
 }
