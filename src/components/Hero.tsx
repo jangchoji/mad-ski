@@ -6,12 +6,13 @@ export function Hero() {
     <section className="relative isolate flex min-h-svh flex-col items-center justify-center overflow-hidden px-5 pt-24 pb-16 md:min-h-screen md:pt-32 md:pb-24">
       <div className="absolute inset-0 slope-grid opacity-70" />
       <div className="absolute inset-0 hero-glow" />
+      <div className="absolute inset-0 scanlines" />
       <SnowField />
       <SlopeLines />
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-midnight-border bg-white/80 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-snow-dim shadow-sm backdrop-blur md:mb-8 md:px-4 md:py-1.5 md:text-xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-neon-amber shadow-[0_0_6px_rgba(255,107,26,0.55)]" />
+        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-midnight-border bg-midnight-elev/60 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-snow-dim backdrop-blur md:mb-8 md:px-4 md:py-1.5 md:text-xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-neon-orange shadow-[0_0_10px_#ff3d00,0_0_20px_rgba(255,61,0,0.6)]" />
           VIVALDI PARK · 25 / 26
         </span>
 
@@ -79,18 +80,18 @@ function SlopeLines() {
       aria-hidden
       viewBox="0 0 1440 900"
       preserveAspectRatio="none"
-      className="absolute inset-0 h-full w-full opacity-50"
+      className="absolute inset-0 h-full w-full opacity-60"
     >
       <defs>
         <linearGradient id="slope-a" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#0B4F8C" stopOpacity="0" />
-          <stop offset="50%" stopColor="#0B4F8C" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#0B4F8C" stopOpacity="0" />
+          <stop offset="0%" stopColor="#FF3D00" stopOpacity="0" />
+          <stop offset="50%" stopColor="#FF3D00" stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#FF3D00" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="slope-b" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#B8D8E8" stopOpacity="0" />
-          <stop offset="50%" stopColor="#B8D8E8" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#B8D8E8" stopOpacity="0" />
+          <stop offset="0%" stopColor="#00F0FF" stopOpacity="0" />
+          <stop offset="50%" stopColor="#00F0FF" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#00F0FF" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path

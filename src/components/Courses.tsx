@@ -62,12 +62,12 @@ export function Courses() {
             key={c.tag}
             className={`group relative flex flex-col overflow-hidden rounded-2xl border p-6 transition md:p-8 ${
               c.featured
-                ? "border-neon-orange/30 bg-linear-to-b from-neon-orange/5 via-midnight-card to-midnight-card shadow-[0_10px_30px_-15px_rgba(11,79,140,0.25)]"
-                : "border-midnight-border bg-midnight-card hover:border-neon-orange/30 hover:shadow-[0_10px_30px_-15px_rgba(11,79,140,0.15)]"
+                ? "border-neon-orange/50 bg-linear-to-b from-neon-orange/10 via-midnight-card to-midnight-card shadow-[0_0_40px_-10px_rgba(255,61,0,0.35)]"
+                : "border-midnight-border bg-midnight-card hover:border-neon-amber/40 hover:shadow-[0_0_30px_-10px_rgba(0,240,255,0.35)]"
             }`}
           >
             {c.featured && (
-              <span className="absolute right-5 top-5 rounded-full bg-neon-amber px-2.5 py-1 text-[9px] font-bold tracking-[0.2em] text-white md:right-6 md:top-6 md:px-3 md:text-[10px]">
+              <span className="absolute right-5 top-5 rounded-full bg-neon-orange px-2.5 py-1 text-[9px] font-bold tracking-[0.2em] text-white shadow-[0_0_16px_rgba(255,61,0,0.6)] md:right-6 md:top-6 md:px-3 md:text-[10px]">
                 POPULAR
               </span>
             )}
