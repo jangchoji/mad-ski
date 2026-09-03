@@ -10,8 +10,8 @@ export function Hero() {
       <SlopeLines />
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center text-center">
-        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-midnight-border bg-midnight-elev/60 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-snow-dim backdrop-blur md:mb-8 md:px-4 md:py-1.5 md:text-xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-neon-orange shadow-[0_0_8px_#ff6b1a]" />
+        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-midnight-border bg-white/80 px-3 py-1 text-[10px] font-medium tracking-[0.2em] text-snow-dim shadow-sm backdrop-blur md:mb-8 md:px-4 md:py-1.5 md:text-xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-neon-amber shadow-[0_0_6px_rgba(255,107,26,0.55)]" />
           VIVALDI PARK · 25 / 26
         </span>
 
@@ -79,18 +79,18 @@ function SlopeLines() {
       aria-hidden
       viewBox="0 0 1440 900"
       preserveAspectRatio="none"
-      className="absolute inset-0 h-full w-full opacity-30"
+      className="absolute inset-0 h-full w-full opacity-50"
     >
       <defs>
         <linearGradient id="slope-a" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#FF6B1A" stopOpacity="0" />
-          <stop offset="50%" stopColor="#FF6B1A" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#FF6B1A" stopOpacity="0" />
+          <stop offset="0%" stopColor="#0B4F8C" stopOpacity="0" />
+          <stop offset="50%" stopColor="#0B4F8C" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#0B4F8C" stopOpacity="0" />
         </linearGradient>
         <linearGradient id="slope-b" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#FFB800" stopOpacity="0" />
-          <stop offset="50%" stopColor="#FFB800" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#FFB800" stopOpacity="0" />
+          <stop offset="0%" stopColor="#B8D8E8" stopOpacity="0" />
+          <stop offset="50%" stopColor="#B8D8E8" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#B8D8E8" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path

@@ -64,12 +64,12 @@ export function Programs() {
             key={p.tag}
             className={`relative flex flex-col rounded-2xl border p-6 md:p-7 ${
               p.highlight
-                ? "border-neon-orange/40 bg-linear-to-b from-neon-orange/10 via-midnight-card to-midnight-card"
+                ? "border-neon-orange/30 bg-linear-to-b from-neon-orange/5 via-midnight-card to-midnight-card shadow-[0_10px_30px_-15px_rgba(11,79,140,0.25)]"
                 : "border-midnight-border bg-midnight-card"
             }`}
           >
             {p.highlight && (
-              <span className="absolute right-5 top-5 rounded-full bg-neon-orange px-2.5 py-1 text-[9px] font-bold tracking-[0.2em] text-midnight md:right-6 md:top-6 md:px-3 md:text-[10px]">
+              <span className="absolute right-5 top-5 rounded-full bg-neon-amber px-2.5 py-1 text-[9px] font-bold tracking-[0.2em] text-white md:right-6 md:top-6 md:px-3 md:text-[10px]">
                 DIRECTOR
               </span>
             )}
