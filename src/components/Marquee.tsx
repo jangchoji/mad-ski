@@ -14,7 +14,7 @@ export function Marquee() {
   return (
     <section
       aria-label="파트너"
-      className="relative shrink-0 border-y border-black bg-white"
+      className="relative border-y border-black bg-white"
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between border-b border-black/15 px-5 py-2 md:px-8">
         <span className="text-[9px] font-semibold uppercase tracking-[0.35em] text-snow-dim md:text-[10px]">
