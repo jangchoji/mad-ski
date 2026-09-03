@@ -1,10 +1,9 @@
 const CREDS = [
   { label: "KSIA", value: "지도자 LEVEL 3" },
   { label: "한국스키장경영협회", value: "티칭 3" },
-  { label: "인터스키", value: "정 지도자" },
 ];
 
-const DIRECTOR_TAGS = ["LEVEL 3", "KSIA", "TEACHING 3", "VIVALDI PARK"];
+const DIRECTOR_TAGS = ["KSIA 레벨3+", "SBAK 티칭 3", "데몬선발전 다수 출전 (7위 기록)"];
 
 export function Director() {
   return (
