@@ -9,6 +9,10 @@ export function Footer() {
           <div className="mt-1 text-[11px] text-snow-muted md:text-xs">
             대명 소노벨 비발디파크 · 감독 장우진 · 010-2007-2883
           </div>
+          <div className="mt-2 flex flex-col gap-1 text-[10px] text-snow-muted md:flex-row md:gap-3 md:text-[11px]">
+            <span>사업자등록번호 834-62-00906</span>
+            <span>통신판매업 신고번호 2026-강원춘천-0697</span>
+          </div>
         </div>
         <div className="text-[11px] text-snow-muted md:text-xs">
           © {new Date().getFullYear()} MAD_INTER SKI. All rights reserved.
