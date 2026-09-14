@@ -34,8 +34,9 @@ export function About() {
           </h2>
           <p className="mt-5 text-sm leading-relaxed text-snow-muted md:mt-6 md:text-base">
             비발디파크 <strong className="text-snow">MAD_INTER SKI</strong>는
-            자세 교정 (Posture Correction)에 집중하는 스키 스쿨입니다. 화려한
-            기술보다 먼저, 나만의 밸런스와 라인을 찾도록 돕습니다.
+            자세 교정 (Posture Correction)에 집중하는 스키 스쿨입니다.
+            비발디파크 스키 강습을 찾는 성인·주니어 회원에게 화려한 기술보다
+            먼저, 나만의 밸런스와 라인을 찾도록 돕습니다.
           </p>
         </div>
 

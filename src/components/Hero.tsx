@@ -8,7 +8,7 @@ export function Hero() {
         <figure className="relative aspect-4389/2926 w-full overflow-hidden">
           <Image
             src="/images/main.jpeg"
-            alt="MAD_INTER SKI"
+            alt="비발디파크 스키 강습 MAD_INTER SKI 자세교정 수업"
             fill
             className="object-cover"
             priority
@@ -30,6 +30,8 @@ export function Hero() {
 
         {/* Hook */}
         <p className="mt-8 text-left text-base font-medium leading-snug text-snow md:mt-12 md:text-2xl">
+          비발디파크 스키 강습 · 자세교정 전문.
+          <br />
           자세가 바뀌면,{" "}
           <span className="text-neon-orange">시즌이 바뀝니다.</span>
         </p>
