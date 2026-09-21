@@ -262,7 +262,7 @@ export function Director() {
                           alt={image.alt}
                           fill
                           sizes="(min-width: 768px) 300px, 50vw"
-                          className="object-cover"
+                          className="object-contain"
                         />
                       </figure>
                     ))}
