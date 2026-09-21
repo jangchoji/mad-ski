@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { SITE } from "@/lib/site";
 
 export function MobileCta() {
   return (
@@ -7,15 +7,17 @@ export function MobileCta() {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto max-w-md px-4 py-3">
-        <Link
-          href="#contact"
+        <a
+          href={SITE.reservationUrl}
+          target="_blank"
+          rel="noreferrer"
           className="flex h-13 w-full items-center justify-between gap-2 rounded-none bg-black px-6 py-4 text-base font-bold uppercase tracking-wider text-white active:scale-[0.99]"
         >
           <span>강습 예약하기</span>
           <span className="text-neon-orange" aria-hidden>
             →
           </span>
-        </Link>
+        </a>
       </div>
     </div>
   );

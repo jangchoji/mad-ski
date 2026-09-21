@@ -1,9 +1,12 @@
 const CREDS = [
-  { label: "KSIA", value: "지도자 LEVEL 3" },
+  { label: "대한스키지도자연맹", value: "레벨 3+" },
   { label: "한국스키장경영협회", value: "티칭 3" },
 ];
 
-const DIRECTOR_TAGS = ["KSIA 레벨3+", "SBAK 티칭 3", "데몬선발전 다수 출전 (7위 기록)"];
+const DIRECTOR_TAGS = [
+  "대한스키지도자연맹 레벨 3+",
+  "한국스키장경영협회 티칭 3",
+];
 
 export function Director() {
   return (
@@ -15,10 +18,10 @@ export function Director() {
         <div className="flex items-end justify-between">
           <div>
             <span className="text-[10px] font-semibold tracking-[0.4em] text-neon-orange md:text-xs">
-              TEAM
+              DIRECTOR
             </span>
             <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
-              감독 · 코치.
+              장우진 감독
             </h2>
           </div>
         </div>
@@ -56,24 +59,25 @@ export function Director() {
 
           <div className="flex flex-col justify-center md:col-span-7">
             <blockquote className="text-xl font-medium leading-relaxed text-snow md:text-3xl">
-              &ldquo;성실함과 진정성 있는 강습으로{" "}
+              &ldquo;스키는 단순히 많이 탄다고 해서{" "}
               <span className="text-neon-orange">
-                최선을 다해 지도할 것을 약속
+                빠르게 늘지는 않습니다.
               </span>
-              드립니다.
-              제 기준의 스키가 아닌, 회원분들의 신체적 특성과 운동 성향을
-              파악해
-              <span className="text-neon-orange">
-                {" "}
-                항상 회원 입장에서 지도
-              </span>
-              하겠습니다.&rdquo;
+              <br />
+              자신의 움직임을 정확하게 이해하고, 잘못된 습관을 찾아 교정하며,
+              올바른 움직임을 반복해서 몸에 익히는 과정이 필요합니다.&rdquo;
             </blockquote>
             <p className="mt-5 text-xs text-snow-muted md:mt-6 md:text-sm">
-              &mdash; 장우진 · MAD_INTER SKI 감독
+              &mdash; 장우진 · MAD INTER SKI SCHOOL 감독
             </p>
 
-            <dl className="mt-10 grid gap-5 sm:grid-cols-3 md:mt-12 md:gap-6">
+            <p className="mt-8 text-sm leading-relaxed text-snow-dim md:text-base">
+              스키어마다 다른 신체 조건과 운동 경험, 움직임의 특징, 현재의 스키
+              수준을 세심하게 살피고, 그에 맞는 방향으로 기술을 만들어가는
+              강습을 지향합니다.
+            </p>
+
+            <dl className="mt-10 grid gap-5 sm:grid-cols-2 md:mt-12 md:gap-6">
               {CREDS.map((c) => (
                 <div
                   key={c.label}

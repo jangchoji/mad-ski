@@ -1,4 +1,11 @@
+import { SITE } from "@/lib/site";
+
 const CHANNELS = [
+  {
+    label: "BOOKING",
+    value: "예약하기",
+    href: SITE.reservationUrl,
+  },
   {
     label: "PHONE",
     value: "010-2007-2883",
@@ -53,7 +60,7 @@ export function Contact() {
             </span>
           </p>
 
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 md:mt-12 md:grid-cols-4 md:gap-4">
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 md:mt-12 md:grid-cols-5 md:gap-4">
             {CHANNELS.map((c) => (
               <a
                 key={c.label}

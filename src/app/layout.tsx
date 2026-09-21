@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   applicationName: SITE.name,
   title: {
-    default: `${SITE.title} | 장우진 감독 자세교정 스키스쿨`,
+    default: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
@@ -47,20 +47,20 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: SITE_URL,
     siteName: SITE.name,
-    title: `${SITE.title} | 장우진 감독 자세교정 스키스쿨`,
+    title: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
     description: SITE.description,
     images: [
       {
         url: "/images/main.jpeg",
         width: 1200,
         height: 800,
-        alt: "비발디파크 스키 강습 MAD_INTER SKI",
+        alt: "비발디파크 스키 강습 MAD INTER SKI SCHOOL",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.title} | 장우진 감독 자세교정 스키스쿨`,
+    title: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
     description: SITE.description,
     images: ["/images/main.jpeg"],
   },

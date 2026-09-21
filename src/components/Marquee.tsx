@@ -1,16 +1,22 @@
-const PARTNERS = [
-  "BOMNAE SPORTS",
-  "ROSSIGNOL",
-  "PHENIX",
-  "SMITH",
-  "소담송하",
-  "대명 소노벨 비발디파크",
+import { PARTNERS } from "@/lib/site";
+
+const MARQUEE_PARTNERS = [
+  ...PARTNERS,
+  {
+    name: "대명 소노벨 비발디파크",
+    displayName: "대명 소노벨 비발디파크",
+    url: "https://www.sonohotelsresorts.com/belle_vp",
+  },
 ];
 
 const isKorean = (s: string) => /[가-힯]/.test(s);
 
 export function Marquee() {
-  const doubled = [...PARTNERS, ...PARTNERS, ...PARTNERS];
+  const doubled = [
+    ...MARQUEE_PARTNERS,
+    ...MARQUEE_PARTNERS,
+    ...MARQUEE_PARTNERS,
+  ];
   return (
     <section
       aria-label="파트너"
@@ -29,15 +35,19 @@ export function Marquee() {
         <div className="marquee-track flex shrink-0 items-center gap-8 whitespace-nowrap pr-8 md:gap-12 md:pr-12">
           {doubled.map((p, i) => (
             <span key={i} className="flex items-center gap-8 md:gap-12">
-              <span
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${p.name} 홈페이지`}
                 className={
-                  isKorean(p)
+                  isKorean(p.displayName)
                     ? "font-display-kr text-lg text-snow md:text-2xl"
                     : "font-display text-lg tracking-[0.08em] text-snow md:text-2xl"
                 }
               >
-                {p}
-              </span>
+                {p.displayName}
+              </a>
               <StarSeparator />
             </span>
           ))}

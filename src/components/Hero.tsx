@@ -8,7 +8,7 @@ export function Hero() {
         <figure className="relative aspect-4389/2926 w-full overflow-hidden">
           <Image
             src="/images/main.jpeg"
-            alt="비발디파크 스키 강습 MAD_INTER SKI 자세교정 수업"
+            alt="비발디파크 스키 강습 MAD INTER SKI SCHOOL"
             fill
             className="object-cover"
             priority
@@ -19,21 +19,22 @@ export function Hero() {
         {/* Title — left aligned */}
         <h1
           className="mt-10 text-left font-display leading-[0.98] tracking-tight text-snow md:mt-16"
-          aria-label="MAD _ INTER SKI"
+          aria-label="MAD INTER SKI SCHOOL"
         >
           <span className="block text-[clamp(2.25rem,11vw,7rem)] text-neon-orange">
             MAD
           </span>
           <span className="block text-[clamp(2.25rem,11vw,7rem)]">INTER</span>
-          <span className="block text-[clamp(2.25rem,11vw,7rem)]">SKI</span>
+          <span className="block text-[clamp(2.25rem,11vw,7rem)]">
+            SKI SCHOOL
+          </span>
         </h1>
 
         {/* Hook */}
         <p className="mt-8 text-left text-base font-medium leading-snug text-snow md:mt-12 md:text-2xl">
-          비발디파크 스키 강습 · 자세교정 전문.
+          제대로 배우면, 스키가 달라집니다.
           <br />
-          자세가 바뀌면,{" "}
-          <span className="text-neon-orange">시즌이 바뀝니다.</span>
+          <span className="text-neon-orange">대명 소노벨 비발디파크</span>
         </p>
       </div>
     </section>

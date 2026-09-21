@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SITE } from "@/lib/site";
 
 const NAV_ITEMS = [
   { href: "#about", label: "About" },
@@ -13,10 +14,10 @@ export function Navigation() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-midnight-border/60 bg-midnight/70 backdrop-blur-xl">
       <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5 md:h-16 md:px-6">
-        <Link href="/" aria-label="MAD_INTER SKI 홈" className="block">
+        <Link href="/" aria-label="MAD INTER SKI SCHOOL 홈" className="block">
           <Image
             src="/images/logo.jpeg"
-            alt="MAD_INTER SKI"
+            alt="MAD INTER SKI SCHOOL"
             width={700}
             height={200}
             priority
@@ -43,12 +44,14 @@ export function Navigation() {
           >
             <PhoneIcon />
           </a>
-          <Link
-            href="#contact"
+          <a
+            href={SITE.reservationUrl}
+            target="_blank"
+            rel="noreferrer"
             className="btn-neon rounded-full bg-midnight-elev px-4 py-2 text-[11px] font-semibold tracking-wider text-neon-orange md:px-5 md:text-xs"
           >
             예약하기
-          </Link>
+          </a>
         </div>
       </nav>
     </header>
