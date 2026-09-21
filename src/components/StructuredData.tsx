@@ -1,4 +1,10 @@
-import { PARTNERS, SITE, SITE_URL } from "@/lib/site";
+import {
+  COACHES,
+  DIRECTOR_PROFILE,
+  PARTNERS,
+  SITE,
+  SITE_URL,
+} from "@/lib/site";
 
 const partnerOrganizations = PARTNERS.map((partner) => ({
   "@type": "Organization",
@@ -25,6 +31,26 @@ const jsonLd = {
       },
     },
     {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/#webpage`,
+      url: SITE_URL,
+      name: SITE.title,
+      description: SITE.description,
+      inLanguage: "ko-KR",
+      isPartOf: {
+        "@id": `${SITE_URL}/#website`,
+      },
+      about: {
+        "@id": `${SITE_URL}/#localbusiness`,
+      },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: SITE.ogImage,
+        width: 1200,
+        height: 630,
+      },
+    },
+    {
       "@type": ["LocalBusiness", "SportsActivityLocation"],
       "@id": `${SITE_URL}/#localbusiness`,
       name: SITE.name,
@@ -38,7 +64,7 @@ const jsonLd = {
         "비발디파크 스키 강습 MAD INTER SKI SCHOOL",
       ],
       url: SITE_URL,
-      image: SITE.image,
+      image: [SITE.image, SITE.ogImage],
       logo: SITE.logo,
       telephone: SITE.telephone,
       priceRange: "₩₩",
@@ -81,6 +107,14 @@ const jsonLd = {
       subjectOf: partnerOrganizations.map((partner) => ({
         "@id": partner["@id"],
       })),
+      employee: [
+        {
+          "@id": `${SITE_URL}/#director-jang-woojin`,
+        },
+        ...COACHES.map((coach) => ({
+          "@id": `${SITE_URL}/#coach-${coach.name}`,
+        })),
+      ],
       potentialAction: {
         "@type": "ReserveAction",
         name: "비발디파크 스키 강습 예약하기",
@@ -166,8 +200,56 @@ const jsonLd = {
             text: "성인 스키 강습은 개인의 신체 특성과 운동 성향에 맞춰 영상 분석, 무전 피드백, 자세교정 중심으로 진행합니다.",
           },
         },
+        {
+          "@type": "Question",
+          name: "MAD INTER SKI SCHOOL 장우진 감독의 자격과 경력은 무엇인가요?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: [
+              ...DIRECTOR_PROFILE.affiliations,
+              ...DIRECTOR_PROFILE.career,
+              ...DIRECTOR_PROFILE.credentials,
+            ].join(", "),
+          },
+        },
       ],
     },
+    {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#director-jang-woojin`,
+      name: DIRECTOR_PROFILE.name,
+      alternateName: DIRECTOR_PROFILE.romanizedName,
+      jobTitle: `${SITE.name} ${DIRECTOR_PROFILE.title}`,
+      image: `${SITE_URL}${DIRECTOR_PROFILE.profileImage}`,
+      worksFor: {
+        "@id": `${SITE_URL}/#localbusiness`,
+      },
+      affiliation: DIRECTOR_PROFILE.affiliations,
+      award: DIRECTOR_PROFILE.career,
+      hasCredential: DIRECTOR_PROFILE.credentials.map((credential) => ({
+        "@type": "EducationalOccupationalCredential",
+        name: credential,
+      })),
+      sameAs: [SITE.youtube, SITE.instagram],
+      description:
+        "비발디파크 스키 강습 MAD INTER SKI SCHOOL 장우진 감독. KSIA 레벨3+, SBAK 티칭3 자격을 보유하고 대한스키지도자연맹 및 한국스키장경영협회 기선전과 데몬선발전에 출전했습니다.",
+    },
+    ...COACHES.map((coach) => ({
+      "@type": "Person",
+      "@id": `${SITE_URL}/#coach-${coach.name}`,
+      name: coach.name,
+      alternateName: coach.romanizedName,
+      jobTitle: `${SITE.name} ${coach.title}`,
+      image: coach.profileImage ? `${SITE_URL}${coach.profileImage}` : undefined,
+      worksFor: {
+        "@id": `${SITE_URL}/#localbusiness`,
+      },
+      hasCredential: coach.credentials.map((credential) => ({
+        "@type": "EducationalOccupationalCredential",
+        name: credential,
+      })),
+      description: `비발디파크 스키 강습 MAD INTER SKI SCHOOL ${coach.name} 코치. ${coach.credentials.join(", ")}`,
+    })),
     ...partnerOrganizations,
   ],
 };

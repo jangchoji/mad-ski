@@ -9,6 +9,7 @@ import { Marquee } from "@/components/Marquee";
 import { MobileCta } from "@/components/MobileCta";
 import { Navigation } from "@/components/Navigation";
 import { Programs } from "@/components/Programs";
+import { SeoContent } from "@/components/SeoContent";
 import { StructuredData } from "@/components/StructuredData";
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
         <Courses />
         <Programs />
         <Director />
+        <SeoContent />
         <Faq />
         <Contact />
       </main>

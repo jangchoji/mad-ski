@@ -51,10 +51,11 @@ export const metadata: Metadata = {
     description: SITE.description,
     images: [
       {
-        url: "/images/main.jpeg",
+        url: "/opengraph-image",
         width: 1200,
-        height: 800,
+        height: 630,
         alt: "비발디파크 스키 강습 MAD INTER SKI SCHOOL",
+        type: "image/png",
       },
     ],
   },
@@ -62,12 +63,14 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
     description: SITE.description,
-    images: ["/images/main.jpeg"],
+    images: ["/twitter-image"],
   },
   other: {
-    thumbnail: `${SITE_URL}/images/main.jpeg`,
-    "og:image": `${SITE_URL}/images/main.jpeg`,
-    "og:image:secure_url": `${SITE_URL}/images/main.jpeg`,
+    thumbnail: SITE.ogImage,
+    "og:image": SITE.ogImage,
+    "og:image:secure_url": SITE.ogImage,
+    "og:image:type": "image/png",
+    "twitter:image": `${SITE_URL}/twitter-image`,
   },
   category: "sports education",
 };
