@@ -36,13 +36,13 @@ export function Director() {
         <div className="mt-8 grid gap-5 md:mt-12 md:grid-cols-12 md:gap-10">
           <div className="md:col-span-5">
             <div className="overflow-hidden border border-midnight-border bg-midnight-card">
-              <div className="grid grid-cols-[132px_1fr] gap-0 sm:grid-cols-[168px_1fr]">
+              <div className="grid grid-cols-[168px_1fr] gap-0 sm:grid-cols-[216px_1fr]">
                 <figure className="relative min-h-52 overflow-hidden border-r border-midnight-border bg-midnight-elev sm:min-h-64">
                   <Image
                     src={DIRECTOR_PROFILE.profileImage}
                     alt={`${DIRECTOR_PROFILE.name} 감독 프로필 사진`}
                     fill
-                    sizes="(min-width: 768px) 168px, 132px"
+                    sizes="(min-width: 640px) 216px, 168px"
                     className="object-cover object-top"
                     priority
                   />
@@ -52,7 +52,7 @@ export function Director() {
                   <span className="text-[10px] font-semibold tracking-[0.3em] text-neon-orange">
                     DIRECTOR
                   </span>
-                  <div className="mt-2 text-4xl font-black text-snow md:text-5xl">
+                  <div className="mt-2 text-3xl font-black text-snow md:text-4xl">
                     {DIRECTOR_PROFILE.name}
                   </div>
                   <div className="mt-1 text-xs text-snow-dim">
@@ -202,7 +202,7 @@ export function Director() {
                 <div
                   className={
                     coach.profileImage
-                      ? "grid grid-cols-[132px_1fr] gap-0 sm:grid-cols-[168px_1fr]"
+                      ? "grid grid-cols-[168px_1fr] gap-0 sm:grid-cols-[216px_1fr]"
                       : "grid gap-0"
                   }
                 >
@@ -212,35 +212,30 @@ export function Director() {
                         src={coach.profileImage}
                         alt={`${coach.name} 코치 프로필 사진`}
                         fill
-                        sizes="(min-width: 768px) 168px, 132px"
+                        sizes="(min-width: 640px) 216px, 168px"
                         className="object-cover object-top"
                       />
                     </figure>
                   ) : null}
 
                   <div className="p-4 sm:p-5 md:p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <span className="text-[10px] font-semibold tracking-[0.3em] text-neon-orange">
-                          COACH
-                        </span>
-                        <h4 className="mt-2 text-3xl font-black text-snow md:text-4xl">
-                          {coach.name}
-                        </h4>
-                        <p className="mt-1 text-xs text-snow-dim">
-                          {coach.romanizedName}
-                        </p>
-                      </div>
-                      <span className="shrink-0 border border-midnight-border px-2 py-1 text-[10px] font-semibold text-snow-muted">
-                        코치
+                    <div>
+                      <span className="text-[10px] font-semibold tracking-[0.3em] text-neon-orange">
+                        COACH
                       </span>
+                      <h4 className="mt-2 text-2xl font-black text-snow md:text-3xl">
+                        {coach.name}
+                      </h4>
+                      <p className="mt-1 text-xs text-snow-dim">
+                        {coach.romanizedName}
+                      </p>
                     </div>
 
                     <ul className="mt-5 grid gap-2">
                       {coach.credentials.map((credential) => (
                         <li
                           key={credential}
-                          className="flex gap-2 text-xs leading-relaxed text-snow-dim sm:gap-3 sm:text-sm"
+                          className="flex gap-2 text-[11px] leading-relaxed text-snow-dim sm:gap-3 sm:text-xs"
                         >
                           <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-neon-orange" />
                           <span>{credential}</span>
