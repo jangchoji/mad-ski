@@ -73,6 +73,7 @@ export async function uploadPhotosAction(formData: FormData) {
   }
 
   let uploaded = 0;
+  let failed = false;
 
   for (const photo of photos) {
     const extension = MIME_TO_EXTENSION[photo.type];
@@ -87,17 +88,22 @@ export async function uploadPhotosAction(formData: FormData) {
       randomBytes(4).toString("hex"),
     ].join("-");
 
-    await createGalleryImage({
-      bytes,
-      contentType: photo.type,
-      extension,
-      originalName: fileName,
-    });
-    uploaded += 1;
+    try {
+      await createGalleryImage({
+        bytes,
+        contentType: photo.type,
+        extension,
+        originalName: fileName,
+      });
+      uploaded += 1;
+    } catch (error) {
+      console.error("Gallery upload failed", error);
+      failed = true;
+    }
   }
 
   if (!uploaded) {
-    redirect("/admin?error=file");
+    redirect(failed ? "/admin?error=upload" : "/admin?error=file");
   }
 
   revalidatePath("/");

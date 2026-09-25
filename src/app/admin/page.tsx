@@ -28,6 +28,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   session: "관리자 로그인이 필요합니다.",
   file: "업로드할 이미지 파일을 다시 확인해주세요. JPG, PNG, WEBP 파일만 가능합니다.",
   storage: "Supabase DB와 Cloudflare R2 환경 변수를 먼저 설정해주세요.",
+  upload:
+    "업로드 중 오류가 발생했습니다. R2 권한, Supabase 테이블, 환경변수를 확인해주세요.",
 };
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {
