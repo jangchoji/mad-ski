@@ -19,10 +19,7 @@ export type GalleryImage = {
 };
 
 export const isSupabaseConfigured = () =>
-  Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.SUPABASE_SERVICE_ROLE_KEY,
-  );
+  Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 export const isR2Configured = () =>
   Boolean(
@@ -38,7 +35,7 @@ export const isGalleryStorageConfigured = () =>
 
 export const getMissingGalleryEnvironmentVariables = () =>
   [
-    "NEXT_PUBLIC_SUPABASE_URL",
+    "SUPABASE_URL",
     "SUPABASE_SERVICE_ROLE_KEY",
     "R2_ACCOUNT_ID",
     "R2_ACCESS_KEY_ID",
@@ -48,7 +45,7 @@ export const getMissingGalleryEnvironmentVariables = () =>
   ].filter((key) => !process.env[key]);
 
 const getSupabaseAdmin = () => {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const url = process.env.SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceRoleKey) {
