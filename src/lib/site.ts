@@ -149,10 +149,6 @@ export const COACHES = [
         src: "/images/coach/web/lim-joon-myeong-lesson-2.jpg",
         alt: "임준명 코치 스키 라이딩",
       },
-      {
-        src: "/images/coach/web/lim-joon-myeong-lesson-3.jpg",
-        alt: "임준명 코치 스키 강습",
-      },
     ],
     credentials: [
       "대한스키지도자연맹 레벨1",

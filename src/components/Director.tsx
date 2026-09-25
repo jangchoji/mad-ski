@@ -15,7 +15,49 @@ const DIRECTOR_STATS = [
   { label: "2324 데몬선발전", value: "7위" },
 ];
 
+const DIRECTOR_HIGHLIGHTS = [
+  "2324 대한스키지도자연맹 데몬선발전 7위",
+  "2526 한국스키장경영협회 기선전 14위",
+  "춘천시스키협회 이사",
+  "유튜브 장초지TV 운영",
+];
+
+const DIRECTOR_VISIBLE_HISTORY_COUNT = 6;
+
+const renderDirectorItem = (item: string) => {
+  if (item === "가평빠지 건전한레저 대표") {
+    return (
+      <>
+        가평빠지{" "}
+        <a
+          href="https://건전한레저.com"
+          target="_blank"
+          rel="noreferrer"
+          className="font-semibold text-snow underline decoration-neon-orange/50 underline-offset-4 transition hover:text-neon-orange"
+        >
+          건전한레저
+        </a>{" "}
+        대표
+      </>
+    );
+  }
+
+  return item;
+};
+
 export function Director() {
+  const remainingDirectorHistory = [
+    ...DIRECTOR_PROFILE.career,
+    ...DIRECTOR_PROFILE.credentials,
+  ].filter((item) => !DIRECTOR_HIGHLIGHTS.includes(item));
+  const visibleDirectorHistory = remainingDirectorHistory.slice(
+    0,
+    DIRECTOR_VISIBLE_HISTORY_COUNT,
+  );
+  const collapsedDirectorHistory = remainingDirectorHistory.slice(
+    DIRECTOR_VISIBLE_HISTORY_COUNT,
+  );
+
   return (
     <section
       id="director"
@@ -131,45 +173,41 @@ export function Director() {
               </div>
 
               <ul className="mt-6 grid gap-2">
-                {[
-                  "2324 대한스키지도자연맹 데몬선발전 7위",
-                  "2526 한국스키장경영협회 기선전 14위",
-                  "춘천시스키협회 이사",
-                  "유튜브 장초지TV 운영",
-                ].map((item) => (
+                {DIRECTOR_HIGHLIGHTS.map((item) => (
                   <li key={item} className="flex gap-3 text-sm text-snow-dim">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-neon-orange" />
-                    <span>{item}</span>
+                    <span>{renderDirectorItem(item)}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <ul className="mt-6 grid gap-2 text-sm leading-relaxed text-snow-dim sm:grid-cols-2">
+                {visibleDirectorHistory.map((item) => (
+                  <li
+                    key={item}
+                    className="border-l border-midnight-border pl-3"
+                  >
+                    {renderDirectorItem(item)}
                   </li>
                 ))}
               </ul>
 
               <details className="mt-6 border-t border-midnight-border pt-5">
                 <summary className="cursor-pointer list-none text-sm font-bold text-snow">
-                  전체 경력 보기
+                  경력 더 보기
                   <span className="ml-2 text-neon-orange" aria-hidden>
                     +
                   </span>
                 </summary>
                 <ul className="mt-4 grid gap-2 text-sm leading-relaxed text-snow-dim sm:grid-cols-2">
-                  {[...DIRECTOR_PROFILE.career, ...DIRECTOR_PROFILE.credentials]
-                    .filter(
-                      (item) =>
-                        ![
-                          "2324 대한스키지도자연맹 데몬선발전 7위",
-                          "2526 한국스키장경영협회 기선전 14위",
-                          "춘천시스키협회 이사",
-                          "유튜브 장초지TV 운영",
-                        ].includes(item),
-                    )
-                    .map((item) => (
-                      <li
-                        key={item}
-                        className="border-l border-midnight-border pl-3"
-                      >
-                        {item}
-                      </li>
-                    ))}
+                  {collapsedDirectorHistory.map((item) => (
+                    <li
+                      key={item}
+                      className="border-l border-midnight-border pl-3"
+                    >
+                      {renderDirectorItem(item)}
+                    </li>
+                  ))}
                 </ul>
               </details>
             </div>
