@@ -3,9 +3,9 @@ export const SITE_URL = "https://www.mad-ski.co.kr";
 export const SITE = {
   name: "MAD INTER SKI SCHOOL",
   legalName: "MAD INTER SKI SCHOOL",
-  title: "비발디파크 스키 강습 MAD INTER SKI SCHOOL",
+  title: "전문 스키 강습 MAD INTER SKI in 비발디파크",
   description:
-    "대명 소노벨 비발디파크 MAD INTER SKI SCHOOL. 스키어마다 다른 신체 조건과 운동 경험, 현재 수준을 살펴 초급부터 상급까지 체계적인 커리큘럼으로 지도합니다.",
+    "MAD INTER SKI SCHOOL은 대명 소노벨 비발디파크에서 진행하는 자세교정 전문 스키 강습팀입니다. 스키어마다 다른 신체 조건과 운동 경험, 현재 수준을 살펴 초급부터 상급까지 체계적인 커리큘럼으로 지도합니다.",
   phone: "010-2007-2883",
   telephone: "+82-10-2007-2883",
   kakao: "mvp8917",
@@ -41,7 +41,7 @@ export const SITE = {
     "비발디파크 성인 스키 강습",
     "비발디파크 성인 스키강습",
     "비발디파크 스키 레슨",
-    "비발디파크 스키스쿨",
+    "비발디파크에서 스키 강습",
     "대명 비발디파크 스키 강습",
     "대명 비발디파크 스키강습",
     "소노벨 비발디파크 스키 강습",
@@ -139,7 +139,7 @@ export const COACHES = [
     name: "임준명",
     title: "코치",
     romanizedName: "Lim Joon-myeong",
-    profileImage: "/images/coach/web/lim-joon-myeong-profile.png",
+    profileImage: "/images/coach/web/lim-joon-myeong-profile.jpg",
     galleryImages: [
       {
         src: "/images/coach/web/lim-joon-myeong-lesson-1.jpg",
@@ -147,7 +147,11 @@ export const COACHES = [
       },
       {
         src: "/images/coach/web/lim-joon-myeong-lesson-2.jpg",
-        alt: "임준명 코치 비발디파크 야간 스키 강습",
+        alt: "임준명 코치 스키 라이딩",
+      },
+      {
+        src: "/images/coach/web/lim-joon-myeong-lesson-3.jpg",
+        alt: "임준명 코치 스키 강습",
       },
     ],
     credentials: [

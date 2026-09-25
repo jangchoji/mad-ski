@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "비발디파크 스키 강습 MAD INTER SKI SCHOOL",
+        alt: "MAD INTER SKI in 비발디파크 전문 스키 강습",
         type: "image/png",
       },
     ],

@@ -7,7 +7,7 @@ export function Footer() {
             MAD INTER SKI SCHOOL
           </div>
           <div className="mt-1 text-[11px] text-snow-muted md:text-xs">
-            대명 소노벨 비발디파크 · 감독 장우진 · 010-2007-2883
+            MAD INTER SKI in 비발디파크 · 감독 장우진 · 010-2007-2883
           </div>
           <div className="mt-2 flex flex-col gap-1 text-[10px] text-snow-muted md:flex-row md:gap-3 md:text-[11px]">
             <span>사업자등록번호 834-62-00906</span>

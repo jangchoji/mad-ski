@@ -8,7 +8,7 @@ export function Hero() {
         <figure className="relative aspect-4389/2926 w-full overflow-hidden">
           <Image
             src="/images/main.jpeg"
-            alt="비발디파크 스키 강습 MAD INTER SKI SCHOOL"
+            alt="MAD INTER SKI in 비발디파크 전문 스키 강습"
             fill
             className="object-cover"
             priority
@@ -34,7 +34,9 @@ export function Hero() {
         <p className="mt-8 text-left text-base font-medium leading-snug text-snow md:mt-12 md:text-2xl">
           제대로 배우면, 스키가 달라집니다.
           <br />
-          <span className="text-neon-orange">대명 소노벨 비발디파크</span>
+          <span className="text-neon-orange">
+            전문 스키 강습 MAD INTER SKI in 비발디파크
+          </span>
         </p>
       </div>
     </section>

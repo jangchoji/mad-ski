@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "MAD INTER SKI SCHOOL 비발디파크 스키 강습 대표 썸네일";
+  "MAD INTER SKI in 비발디파크 전문 스키 강습 대표 썸네일";
 
 export const size = {
   width: 1200,
@@ -78,7 +78,7 @@ export default function Image() {
                 letterSpacing: 6,
               }}
             >
-              VIVALDI PARK SKI LESSON
+              MAD INTER SKI IN VIVALDI PARK
             </div>
             <div
               style={{
@@ -101,7 +101,7 @@ export default function Image() {
                 lineHeight: 1.2,
               }}
             >
-              제대로 배우면, 스키가 달라집니다.
+              자세교정 전문 스키 강습
             </div>
           </div>
 
@@ -115,7 +115,9 @@ export default function Image() {
             }}
           >
             <span>{SITE_URL_TEXT}</span>
-            <span style={{ color: "#ff3b00" }}>대명 소노벨 비발디파크</span>
+            <span style={{ color: "#ff3b00" }}>
+              제대로 배우면, 스키가 달라집니다.
+            </span>
           </div>
         </div>
       </div>

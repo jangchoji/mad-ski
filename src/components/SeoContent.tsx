@@ -1,7 +1,7 @@
 const SEARCH_TOPICS = [
   {
-    title: "비발디파크 스키 강습",
-    desc: "MAD INTER SKI SCHOOL은 대명 소노벨 비발디파크에서 진행하는 스키 강습을 중심으로 초급 입문, 자세교정, 카빙, 숏턴까지 수준별 커리큘럼을 운영합니다.",
+    title: "MAD INTER SKI in 비발디파크",
+    desc: "MAD INTER SKI SCHOOL은 대명 소노벨 비발디파크에서 진행하는 자세교정 전문 스키 강습을 중심으로 초급 입문, 카빙, 숏턴까지 수준별 커리큘럼을 운영합니다.",
   },
   {
     title: "어린이 스키 강습",

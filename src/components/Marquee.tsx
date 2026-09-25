@@ -1,22 +1,9 @@
 import { PARTNERS } from "@/lib/site";
 
-const MARQUEE_PARTNERS = [
-  ...PARTNERS,
-  {
-    name: "대명 소노벨 비발디파크",
-    displayName: "대명 소노벨 비발디파크",
-    url: "https://www.sonohotelsresorts.com/belle_vp",
-  },
-];
-
 const isKorean = (s: string) => /[가-힯]/.test(s);
 
 export function Marquee() {
-  const doubled = [
-    ...MARQUEE_PARTNERS,
-    ...MARQUEE_PARTNERS,
-    ...MARQUEE_PARTNERS,
-  ];
+  const doubled = [...PARTNERS, ...PARTNERS, ...PARTNERS];
   return (
     <section
       aria-label="파트너"
@@ -42,11 +29,14 @@ export function Marquee() {
                 aria-label={`${p.name} 홈페이지`}
                 className={
                   isKorean(p.displayName)
-                    ? "font-display-kr text-lg text-snow md:text-2xl"
-                    : "font-display text-lg tracking-[0.08em] text-snow md:text-2xl"
+                    ? "group inline-flex items-baseline gap-1.5 font-display-kr text-lg text-snow transition hover:text-neon-orange md:gap-2 md:text-2xl"
+                    : "group inline-flex items-baseline gap-1.5 font-display text-lg tracking-[0.08em] text-snow transition hover:text-neon-orange md:gap-2 md:text-2xl"
                 }
               >
-                {p.displayName}
+                <span>{p.displayName}</span>
+                <span className="text-xs text-snow-muted transition group-hover:-translate-y-0.5 group-hover:text-neon-orange md:text-sm">
+                  ↗
+                </span>
               </a>
               <StarSeparator />
             </span>

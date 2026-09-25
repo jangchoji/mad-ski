@@ -56,7 +56,7 @@ export function Contact() {
             스케줄로 답변드립니다.
             <br />
             <span className="text-snow-muted">
-              장소 · 대명 소노벨 비발디파크
+              MAD INTER SKI in 비발디파크
             </span>
           </p>
 

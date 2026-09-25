@@ -247,10 +247,15 @@ export function Director() {
 
                 {coach.galleryImages?.length ? (
                   <div className="grid grid-cols-2 gap-2 border-t border-midnight-border p-2">
-                    {coach.galleryImages.map((image) => (
+                    {coach.galleryImages.map((image, imageIndex) => (
                       <figure
                         key={image.src}
-                        className="relative aspect-4/3 overflow-hidden bg-midnight-elev"
+                        className={
+                          coach.galleryImages?.length === 3 &&
+                          imageIndex === 2
+                            ? "relative col-span-2 aspect-4/3 overflow-hidden bg-midnight-elev"
+                            : "relative aspect-4/3 overflow-hidden bg-midnight-elev"
+                        }
                       >
                         <Image
                           src={image.src}
