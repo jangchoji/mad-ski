@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { isAdminAuthenticated, isAdminConfigured } from "@/lib/admin";
-import { getGalleryImages, isGalleryStorageConfigured } from "@/lib/gallery";
+import {
+  getGalleryImages,
+  getMissingGalleryEnvironmentVariables,
+  isGalleryStorageConfigured,
+} from "@/lib/gallery";
 import { loginAction, logoutAction, uploadPhotosAction } from "./actions";
 
 export const metadata: Metadata = {
@@ -30,6 +34,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   const params = await searchParams;
   const configured = isAdminConfigured();
   const storageConfigured = isGalleryStorageConfigured();
+  const missingStorageVariables = getMissingGalleryEnvironmentVariables();
   const authenticated = await isAdminAuthenticated();
   const galleryImages = authenticated ? await getGalleryImages() : [];
 
@@ -69,6 +74,23 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               Supabase DB와 Cloudflare R2 환경 변수를 `.env.local`과 Vercel에
               설정해주세요.
             </p>
+            {missingStorageVariables.length ? (
+              <div className="mt-5 border border-midnight-border bg-midnight-elev p-4">
+                <p className="text-xs font-semibold tracking-[0.2em] text-snow-muted">
+                  누락된 환경변수
+                </p>
+                <ul className="mt-3 grid gap-1 text-sm font-semibold text-snow-dim">
+                  {missingStorageVariables.map((key) => (
+                    <li key={key}>{key}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="mt-5 border border-midnight-border bg-midnight-elev p-4 text-sm text-snow-dim">
+                필요한 환경변수는 감지됐습니다. 서버를 재시작하거나 Vercel을
+                재배포해주세요.
+              </p>
+            )}
             <form action={logoutAction} className="mt-6">
               <button
                 type="submit"
