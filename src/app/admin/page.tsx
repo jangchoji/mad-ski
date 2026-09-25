@@ -30,6 +30,9 @@ const ERROR_MESSAGES: Record<string, string> = {
   storage: "Supabase DB와 Cloudflare R2 환경 변수를 먼저 설정해주세요.",
   upload:
     "업로드 중 오류가 발생했습니다. R2 권한, Supabase 테이블, 환경변수를 확인해주세요.",
+  r2: "R2 업로드에 실패했습니다. R2 토큰 권한(Object Read & Write), bucket 이름(jangchoji), R2 환경변수를 확인해주세요.",
+  supabase:
+    "Supabase 저장에 실패했습니다. SQL Editor에서 supabase-gallery.sql을 실행했는지, SUPABASE_URL과 SERVICE_ROLE_KEY가 맞는지 확인해주세요.",
 };
 
 export default async function AdminPage({ searchParams }: AdminPageProps) {

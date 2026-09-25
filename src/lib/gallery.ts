@@ -18,6 +18,17 @@ export type GalleryImage = {
   uploadedAt: number;
 };
 
+export class GalleryUploadError extends Error {
+  constructor(
+    public readonly step: "r2" | "supabase",
+    cause: unknown,
+  ) {
+    super(`Gallery upload failed at ${step}`);
+    this.name = "GalleryUploadError";
+    this.cause = cause;
+  }
+}
+
 export const isSupabaseConfigured = () =>
   Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 
@@ -61,7 +72,10 @@ const getSupabaseAdmin = () => {
 };
 
 const getR2Client = () => {
-  const accountId = process.env.R2_ACCOUNT_ID;
+  const accountId = process.env.R2_ACCOUNT_ID?.trim()
+    .replace(/^https?:\/\//, "")
+    .replace(/\.r2\.cloudflarestorage\.com\/?$/, "")
+    .replace(/\/.*$/, "");
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
 
@@ -72,6 +86,7 @@ const getR2Client = () => {
   return new S3Client({
     region: "auto",
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    forcePathStyle: true,
     credentials: {
       accessKeyId,
       secretAccessKey,
@@ -110,15 +125,19 @@ export const createGalleryImage = async ({
   const imageUrl = getR2PublicUrl(imageKey);
   const r2 = getR2Client();
 
-  await r2.send(
-    new PutObjectCommand({
-      Bucket: bucket,
-      Key: imageKey,
-      Body: bytes,
-      ContentType: contentType,
-      CacheControl: "public, max-age=31536000, immutable",
-    }),
-  );
+  try {
+    await r2.send(
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: imageKey,
+        Body: bytes,
+        ContentType: contentType,
+        CacheControl: "public, max-age=31536000, immutable",
+      }),
+    );
+  } catch (error) {
+    throw new GalleryUploadError("r2", error);
+  }
 
   const supabase = getSupabaseAdmin();
   const { error } = await supabase.from(GALLERY_TABLE).insert({
@@ -128,7 +147,7 @@ export const createGalleryImage = async ({
   });
 
   if (error) {
-    throw error;
+    throw new GalleryUploadError("supabase", error);
   }
 };
 

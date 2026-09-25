@@ -9,7 +9,11 @@ import {
   setAdminSession,
   verifyAdminLogin,
 } from "@/lib/admin";
-import { createGalleryImage, isGalleryStorageConfigured } from "@/lib/gallery";
+import {
+  createGalleryImage,
+  GalleryUploadError,
+  isGalleryStorageConfigured,
+} from "@/lib/gallery";
 
 const MAX_FILE_SIZE = 12 * 1024 * 1024;
 const MAX_FILE_COUNT = 10;
@@ -73,7 +77,7 @@ export async function uploadPhotosAction(formData: FormData) {
   }
 
   let uploaded = 0;
-  let failed = false;
+  let failedStep: "r2" | "supabase" | "upload" | null = null;
 
   for (const photo of photos) {
     const extension = MIME_TO_EXTENSION[photo.type];
@@ -98,12 +102,13 @@ export async function uploadPhotosAction(formData: FormData) {
       uploaded += 1;
     } catch (error) {
       console.error("Gallery upload failed", error);
-      failed = true;
+      failedStep =
+        error instanceof GalleryUploadError ? error.step : "upload";
     }
   }
 
   if (!uploaded) {
-    redirect(failed ? "/admin?error=upload" : "/admin?error=file");
+    redirect(failedStep ? `/admin?error=${failedStep}` : "/admin?error=file");
   }
 
   revalidatePath("/");
