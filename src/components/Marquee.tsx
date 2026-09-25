@@ -34,6 +34,9 @@ export function Marquee() {
                 }
               >
                 <span>{p.displayName}</span>
+                <span className="text-[9px] font-semibold tracking-[0.18em] text-snow-muted transition group-hover:-translate-y-0.5 group-hover:text-neon-orange md:text-[10px]">
+                  바로가기
+                </span>
                 <span className="text-xs text-snow-muted transition group-hover:-translate-y-0.5 group-hover:text-neon-orange md:text-sm">
                   ↗
                 </span>
