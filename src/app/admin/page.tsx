@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { isAdminAuthenticated, isAdminConfigured } from "@/lib/admin";
 import {
+  getGalleryStorageConfigurationIssues,
   getGalleryImages,
-  getMissingGalleryEnvironmentVariables,
   isGalleryStorageConfigured,
 } from "@/lib/gallery";
-import { loginAction, logoutAction, uploadPhotosAction } from "./actions";
+import {
+  deletePhotosAction,
+  loginAction,
+  logoutAction,
+  uploadPhotosAction,
+} from "./actions";
 
 export const metadata: Metadata = {
   title: "관리자",
@@ -18,6 +23,7 @@ export const metadata: Metadata = {
 
 type AdminPageProps = {
   searchParams: Promise<{
+    deleted?: string;
     error?: string;
     uploaded?: string;
   }>;
@@ -27,6 +33,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   login: "아이디 또는 비밀번호를 확인해주세요.",
   session: "관리자 로그인이 필요합니다.",
   file: "업로드할 이미지 파일을 다시 확인해주세요. JPG, PNG, WEBP 파일만 가능합니다.",
+  delete: "삭제할 사진을 선택해주세요.",
   storage: "Supabase DB와 Cloudflare R2 환경 변수를 먼저 설정해주세요.",
   upload:
     "업로드 중 오류가 발생했습니다. R2 권한, Supabase 테이블, 환경변수를 확인해주세요.",
@@ -39,7 +46,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   const params = await searchParams;
   const configured = isAdminConfigured();
   const storageConfigured = isGalleryStorageConfigured();
-  const missingStorageVariables = getMissingGalleryEnvironmentVariables();
+  const storageConfigurationIssues = getGalleryStorageConfigurationIssues();
   const authenticated = await isAdminAuthenticated();
   const galleryImages = authenticated ? await getGalleryImages() : [];
 
@@ -79,14 +86,14 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
               Supabase DB와 Cloudflare R2 환경 변수를 `.env.local`과 Vercel에
               설정해주세요.
             </p>
-            {missingStorageVariables.length ? (
+            {storageConfigurationIssues.length ? (
               <div className="mt-5 border border-midnight-border bg-midnight-elev p-4">
                 <p className="text-xs font-semibold tracking-[0.2em] text-snow-muted">
-                  누락된 환경변수
+                  저장소 설정 확인
                 </p>
                 <ul className="mt-3 grid gap-1 text-sm font-semibold text-snow-dim">
-                  {missingStorageVariables.map((key) => (
-                    <li key={key}>{key}</li>
+                  {storageConfigurationIssues.map((issue) => (
+                    <li key={issue}>{issue}</li>
                   ))}
                 </ul>
               </div>
@@ -126,6 +133,12 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 </p>
               ) : null}
 
+              {params.deleted ? (
+                <p className="mt-4 border border-neon-orange bg-neon-orange/5 px-3 py-2 text-sm font-semibold text-neon-orange">
+                  사진 {params.deleted}장을 삭제했습니다.
+                </p>
+              ) : null}
+
               {params.error ? (
                 <p className="mt-4 border border-midnight-border bg-midnight-elev px-3 py-2 text-sm text-snow-dim">
                   {ERROR_MESSAGES[params.error] ?? ERROR_MESSAGES.file}
@@ -145,8 +158,8 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                   />
                 </label>
                 <p className="text-xs leading-relaxed text-snow-muted">
-                  한 번에 최대 10장, 파일당 최대 12MB까지 업로드할 수
-                  있습니다. 업로드한 사진은 홈페이지 갤러리에 바로 표시됩니다.
+                  한 번에 최대 20장, 파일당 최대 12MB, 총 80MB까지 업로드할 수
+                  있습니다. 여러 장은 동시에 R2로 업로드됩니다.
                 </p>
                 <button
                   type="submit"
@@ -158,22 +171,48 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
             </div>
 
             <div className="border border-midnight-border bg-midnight-card p-5 md:p-7">
-              <h2 className="text-lg font-black">업로드된 사진</h2>
+              <div className="flex items-center justify-between gap-3">
+                <h2 className="text-lg font-black">업로드된 사진</h2>
+                {galleryImages.length ? (
+                  <span className="text-xs font-semibold text-snow-muted">
+                    {galleryImages.length}장
+                  </span>
+                ) : null}
+              </div>
               {galleryImages.length ? (
-                <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  {galleryImages.slice(0, 12).map((image) => (
-                    <figure
-                      key={image.src}
-                      className="relative aspect-4/3 overflow-hidden bg-midnight-elev"
-                    >
-                      <img
-                        src={image.src}
-                        alt={image.alt}
-                        className="h-full w-full object-cover"
-                      />
-                    </figure>
-                  ))}
-                </div>
+                <form action={deletePhotosAction} className="mt-5">
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {galleryImages.map((image) => (
+                      <label
+                        key={image.id}
+                        className="group relative aspect-4/3 cursor-pointer overflow-hidden bg-midnight-elev"
+                      >
+                        <input
+                          type="checkbox"
+                          name="photoIds"
+                          value={image.id}
+                          className="peer absolute left-2 top-2 z-10 size-5 accent-neon-orange"
+                          aria-label={`${image.fileName} 삭제 선택`}
+                        />
+                        <img
+                          src={image.src}
+                          alt={image.alt}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition group-hover:scale-105 peer-checked:opacity-45"
+                        />
+                        <span className="absolute inset-x-0 bottom-0 bg-black/70 px-2 py-1 text-[10px] font-semibold text-white opacity-0 transition group-hover:opacity-100 peer-checked:opacity-100">
+                          삭제 선택
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <button
+                    type="submit"
+                    className="mt-4 w-full border border-midnight-border px-5 py-3 text-sm font-black text-snow transition hover:border-neon-orange hover:bg-neon-orange hover:text-white"
+                  >
+                    선택한 사진 삭제
+                  </button>
+                </form>
               ) : (
                 <p className="mt-5 text-sm text-snow-muted">
                   아직 업로드된 사진이 없습니다.

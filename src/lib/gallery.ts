@@ -1,7 +1,12 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  DeleteObjectsCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { createClient } from "@supabase/supabase-js";
 
 const GALLERY_TABLE = process.env.SUPABASE_GALLERY_TABLE ?? "gallery_photos";
+const R2_ACCOUNT_ID_PATTERN = /^[a-f0-9]{32}$/i;
 
 type GalleryPhotoRow = {
   id: string;
@@ -12,8 +17,10 @@ type GalleryPhotoRow = {
 };
 
 export type GalleryImage = {
+  id: string;
   src: string;
   alt: string;
+  imageKey: string;
   fileName: string;
   uploadedAt: number;
 };
@@ -34,7 +41,7 @@ export const isSupabaseConfigured = () =>
 
 export const isR2Configured = () =>
   Boolean(
-    process.env.R2_ACCOUNT_ID &&
+    getR2AccountId() &&
       process.env.R2_ACCESS_KEY_ID &&
       process.env.R2_SECRET_ACCESS_KEY &&
       process.env.R2_BUCKET &&
@@ -55,6 +62,33 @@ export const getMissingGalleryEnvironmentVariables = () =>
     "R2_PUBLIC_URL",
   ].filter((key) => !process.env[key]);
 
+export const getGalleryStorageConfigurationIssues = () => {
+  const issues = getMissingGalleryEnvironmentVariables().map(
+    (key) => `${key} 환경변수가 없습니다.`,
+  );
+
+  if (process.env.R2_ACCOUNT_ID && !getR2AccountId()) {
+    issues.push(
+      "R2_ACCOUNT_ID는 Cloudflare 계정의 32자 Account ID여야 합니다. custom domain, bucket URL, r2.dev URL은 R2_PUBLIC_URL에만 사용하세요.",
+    );
+  }
+
+  return issues;
+};
+
+const getR2AccountId = () => {
+  const accountId = process.env.R2_ACCOUNT_ID?.trim()
+    .replace(/^https?:\/\//, "")
+    .replace(/\.r2\.cloudflarestorage\.com\/?$/, "")
+    .replace(/\/.*$/, "");
+
+  if (!accountId || !R2_ACCOUNT_ID_PATTERN.test(accountId)) {
+    return null;
+  }
+
+  return accountId;
+};
+
 const getSupabaseAdmin = () => {
   const url = process.env.SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -72,15 +106,18 @@ const getSupabaseAdmin = () => {
 };
 
 const getR2Client = () => {
-  const accountId = process.env.R2_ACCOUNT_ID?.trim()
-    .replace(/^https?:\/\//, "")
-    .replace(/\.r2\.cloudflarestorage\.com\/?$/, "")
-    .replace(/\/.*$/, "");
+  const accountId = getR2AccountId();
   const accessKeyId = process.env.R2_ACCESS_KEY_ID;
   const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
 
-  if (!accountId || !accessKeyId || !secretAccessKey) {
+  if (!accessKeyId || !secretAccessKey) {
     throw new Error("R2 environment variables are missing.");
+  }
+
+  if (!accountId) {
+    throw new Error(
+      "R2_ACCOUNT_ID must be the 32-character Cloudflare account ID, not a custom domain or bucket URL.",
+    );
   }
 
   return new S3Client({
@@ -104,51 +141,135 @@ const getR2PublicUrl = (imageKey: string) => {
   return `${publicUrl.replace(/\/$/, "")}/${imageKey}`;
 };
 
-export const createGalleryImage = async ({
-  bytes,
-  contentType,
-  extension,
-  originalName,
-}: {
-  bytes: Buffer;
-  contentType: string;
-  extension: string;
-  originalName: string;
-}) => {
+const getR2Bucket = () => {
   const bucket = process.env.R2_BUCKET;
 
   if (!bucket) {
     throw new Error("R2_BUCKET environment variable is missing.");
   }
 
-  const imageKey = `gallery/${new Date().toISOString().slice(0, 10)}/${Date.now()}-${originalName}.${extension}`;
-  const imageUrl = getR2PublicUrl(imageKey);
-  const r2 = getR2Client();
+  return bucket;
+};
 
-  try {
-    await r2.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: imageKey,
-        Body: bytes,
-        ContentType: contentType,
-        CacheControl: "public, max-age=31536000, immutable",
-      }),
+type NewGalleryImage = {
+  bytes: Buffer;
+  contentType: string;
+  extension: string;
+  originalName: string;
+};
+
+export const createGalleryImages = async (images: NewGalleryImage[]) => {
+  if (!images.length) {
+    return 0;
+  }
+
+  const bucket = getR2Bucket();
+  const r2 = getR2Client();
+  const uploadedAt = Date.now();
+  const uploadDate = new Date(uploadedAt).toISOString().slice(0, 10);
+
+  const uploadResults = await Promise.allSettled(
+    images.map(async (image, index) => {
+      const imageKey = `gallery/${uploadDate}/${uploadedAt + index}-${image.originalName}.${image.extension}`;
+
+      await r2.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: imageKey,
+          Body: image.bytes,
+          ContentType: image.contentType,
+          CacheControl: "public, max-age=31536000, immutable",
+        }),
+      );
+
+      return {
+        image_key: imageKey,
+        image_url: getR2PublicUrl(imageKey),
+        alt: "MAD INTER SKI in 비발디파크 현장 사진",
+      };
+    }),
+  );
+
+  const uploadedRows = uploadResults
+    .filter(
+      (result): result is PromiseFulfilledResult<{
+        image_key: string;
+        image_url: string;
+        alt: string;
+      }> => result.status === "fulfilled",
+    )
+    .map((result) => result.value);
+
+  if (!uploadedRows.length) {
+    const firstFailure = uploadResults.find(
+      (result): result is PromiseRejectedResult => result.status === "rejected",
     );
-  } catch (error) {
-    throw new GalleryUploadError("r2", error);
+    throw new GalleryUploadError("r2", firstFailure?.reason);
   }
 
   const supabase = getSupabaseAdmin();
-  const { error } = await supabase.from(GALLERY_TABLE).insert({
-    image_key: imageKey,
-    image_url: imageUrl,
-    alt: "MAD INTER SKI in 비발디파크 현장 사진",
-  });
+  const { error } = await supabase.from(GALLERY_TABLE).insert(uploadedRows);
 
   if (error) {
     throw new GalleryUploadError("supabase", error);
   }
+
+  return uploadedRows.length;
+};
+
+export const deleteGalleryImages = async (ids: string[]) => {
+  const uniqueIds = [...new Set(ids)].filter(Boolean);
+
+  if (!uniqueIds.length) {
+    return 0;
+  }
+
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase
+    .from(GALLERY_TABLE)
+    .select("id,image_key")
+    .in("id", uniqueIds);
+
+  if (error || !data?.length) {
+    throw new GalleryUploadError("supabase", error);
+  }
+
+  const bucket = getR2Bucket();
+  const r2 = getR2Client();
+
+  try {
+    const result = await r2.send(
+      new DeleteObjectsCommand({
+        Bucket: bucket,
+        Delete: {
+          Objects: data.map((image) => ({ Key: image.image_key })),
+          Quiet: true,
+        },
+      }),
+    );
+
+    if (result.Errors?.length) {
+      throw new Error(
+        `R2 delete failed for ${result.Errors.length} object(s).`,
+      );
+    }
+  } catch (error) {
+    throw new GalleryUploadError("r2", error);
+  }
+
+  const { error: deleteError } = await supabase
+    .from(GALLERY_TABLE)
+    .delete()
+    .in(
+      "id",
+      data.map((image) => image.id),
+    );
+
+  if (deleteError) {
+    throw new GalleryUploadError("supabase", deleteError);
+  }
+
+  return data.length;
 };
 
 export const getGalleryImages = async (): Promise<GalleryImage[]> => {
@@ -170,8 +291,10 @@ export const getGalleryImages = async (): Promise<GalleryImage[]> => {
   }
 
   return (data as GalleryPhotoRow[]).map((image) => ({
+    id: image.id,
     src: image.image_url,
     alt: image.alt ?? "MAD INTER SKI in 비발디파크 현장 사진",
+    imageKey: image.image_key,
     fileName: image.image_key.split("/").at(-1) ?? image.id,
     uploadedAt: new Date(image.created_at).getTime(),
   }));
