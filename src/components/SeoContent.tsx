@@ -29,9 +29,9 @@ export function SeoContent() {
             GUIDE
           </span>
           <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
-            검색으로 찾는
+            필요한 강습을
             <br />
-            스키 강습 안내
+            한눈에
           </h2>
         </div>
 

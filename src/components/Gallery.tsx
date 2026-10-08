@@ -22,7 +22,7 @@ export async function Gallery() {
               GALLERY
             </span>
             <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
-              현장 사진.
+              현장 사진
             </h2>
           </div>
           <p className="max-w-xs text-sm leading-relaxed text-snow-muted">

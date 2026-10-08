@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const FEATURES = [
   {
     tag: "01",
@@ -16,6 +18,56 @@ const FEATURES = [
   },
 ];
 
+export function AboutSummary() {
+  return (
+    <section
+      id="about"
+      className="relative mx-auto max-w-7xl px-5 py-16 md:px-6 md:py-24"
+    >
+      <div className="grid gap-8 border-y border-midnight-border py-10 md:grid-cols-[1fr_1.2fr] md:items-end md:py-14">
+        <div>
+          <span className="text-[10px] font-semibold tracking-[0.4em] text-neon-orange md:text-xs">
+            ABOUT
+          </span>
+          <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
+            제대로 배우면,
+            <br />
+            스키가 달라집니다
+          </h2>
+        </div>
+
+        <div>
+          <p className="text-sm leading-relaxed text-snow-dim md:text-base">
+            매드인터스키스쿨은 스키어마다 다른 신체 조건과 움직임을 먼저 보고,
+            영상 분석과 실시간 피드백으로 자세를 교정합니다.
+          </p>
+          <div className="mt-6 grid gap-2 sm:grid-cols-3">
+            {FEATURES.map((feature) => (
+              <div
+                key={feature.tag}
+                className="border border-midnight-border bg-midnight-card p-4"
+              >
+                <p className="text-[10px] font-semibold tracking-[0.25em] text-neon-orange">
+                  {feature.tag}
+                </p>
+                <p className="mt-2 text-sm font-black text-snow">
+                  {feature.title}
+                </p>
+              </div>
+            ))}
+          </div>
+          <Link
+            href="/about"
+            className="mt-6 inline-flex items-center border border-midnight-border px-5 py-3 text-sm font-black text-snow transition hover:border-neon-orange hover:bg-neon-orange hover:text-white"
+          >
+            ABOUT 더보기
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function About() {
   return (
     <section
@@ -30,7 +82,7 @@ export function About() {
           <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
             제대로 배우면,
             <br />
-            스키가 달라집니다.
+            스키가 달라집니다
           </h2>
           <div className="mt-5 space-y-4 text-sm leading-relaxed text-snow-muted md:mt-6 md:text-base">
             <p>

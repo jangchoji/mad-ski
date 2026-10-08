@@ -35,7 +35,7 @@ export function Faq() {
           <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
             비발디파크
             <br />
-            스키 강습 안내.
+            스키 강습 안내
           </h2>
         </div>
 

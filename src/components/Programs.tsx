@@ -50,7 +50,7 @@ export function Programs() {
             PROGRAMS
           </span>
           <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
-            프로그램 & 요금.
+            프로그램 & 요금
           </h2>
         </div>
         <p className="max-w-xs text-sm text-snow-muted">

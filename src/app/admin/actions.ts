@@ -15,6 +15,7 @@ import {
   GalleryUploadError,
   isGalleryStorageConfigured,
 } from "@/lib/gallery";
+import { createReviewCustomer, ReviewError } from "@/lib/reviews";
 
 const MAX_FILE_SIZE = 12 * 1024 * 1024;
 const MAX_FILE_COUNT = 20;
@@ -33,6 +34,13 @@ const sanitizeName = (name: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 44) || "mad-ski-photo";
+
+const sanitizeLoginId = (value: string) =>
+  value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9._-]/g, "")
+    .slice(0, 40);
 
 const isFile = (value: FormDataEntryValue): value is File =>
   typeof value === "object" &&
@@ -161,4 +169,38 @@ export async function deletePhotosAction(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/admin");
   redirect(`/admin?deleted=${deleted}`);
+}
+
+export async function createReviewCustomerAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  const name = String(formData.get("name") ?? "").trim().slice(0, 40);
+  const phone = String(formData.get("phone") ?? "").trim().slice(0, 40);
+  const memo = String(formData.get("memo") ?? "").trim().slice(0, 500);
+  const loginId = sanitizeLoginId(String(formData.get("loginId") ?? ""));
+  const password = String(formData.get("password") ?? "");
+
+  if (!name || loginId.length < 4 || password.length < 4) {
+    redirect("/admin?error=customer");
+  }
+
+  try {
+    await createReviewCustomer({
+      name,
+      phone,
+      memo,
+      loginId,
+      password,
+    });
+  } catch (error) {
+    console.error("Review customer creation failed", error);
+    const failedStep =
+      error instanceof ReviewError ? error.step : "customer";
+    redirect(`/admin?error=${failedStep}`);
+  }
+
+  revalidatePath("/admin");
+  redirect("/admin?customer=created");
 }

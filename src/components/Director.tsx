@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { COACHES, DIRECTOR_PROFILE } from "@/lib/site";
 
 const DIRECTOR_TAGS = [
@@ -44,6 +45,73 @@ const renderDirectorItem = (item: string) => {
 
   return item;
 };
+
+export function DirectorSummary() {
+  return (
+    <section
+      id="director"
+      className="relative border-y border-midnight-border bg-midnight-elev/40"
+    >
+      <div className="mx-auto grid max-w-7xl gap-8 px-5 py-16 md:grid-cols-[0.9fr_1.1fr] md:items-center md:px-6 md:py-24">
+        <div>
+          <span className="text-[10px] font-semibold tracking-[0.4em] text-neon-orange md:text-xs">
+            DIRECTOR
+          </span>
+          <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
+            {DIRECTOR_PROFILE.name} {DIRECTOR_PROFILE.title}
+          </h2>
+          <p className="mt-5 text-sm leading-relaxed text-snow-dim md:text-base">
+            KSIA 레벨3+, SBAK 티칭3. 영상 분석과 반복 훈련으로 스키어마다
+            다른 움직임을 교정합니다.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            {DIRECTOR_TAGS.slice(0, 4).map((tag) => (
+              <span
+                key={tag}
+                className="border border-midnight-border bg-midnight-card px-3 py-1.5 text-[10px] font-semibold tracking-wider text-snow-dim"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          <Link
+            href="/director"
+            className="mt-7 inline-flex items-center border border-midnight-border px-5 py-3 text-sm font-black text-snow transition hover:border-neon-orange hover:bg-neon-orange hover:text-white"
+          >
+            DIRECTOR 더보기
+          </Link>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-[180px_1fr] md:gap-4">
+          <figure className="relative aspect-4/5 overflow-hidden border border-midnight-border bg-midnight-card sm:aspect-auto sm:min-h-64">
+            <Image
+              src={DIRECTOR_PROFILE.profileImage}
+              alt={`${DIRECTOR_PROFILE.name} 감독 프로필 사진`}
+              fill
+              sizes="(min-width: 768px) 180px, 100vw"
+              className="object-cover object-top"
+            />
+          </figure>
+          <div className="grid grid-cols-2 border border-midnight-border bg-midnight-card">
+            {DIRECTOR_STATS.map((stat) => (
+              <div
+                key={stat.label}
+                className="border-b border-midnight-border p-4 odd:border-r md:p-5 [&:nth-last-child(-n+2)]:border-b-0"
+              >
+                <div className="text-[9px] font-semibold tracking-[0.25em] text-snow-muted">
+                  {stat.label}
+                </div>
+                <div className="mt-2 font-display-kr text-xl text-snow md:text-2xl">
+                  {stat.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function Director() {
   const remainingDirectorHistory = [

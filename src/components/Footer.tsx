@@ -1,6 +1,6 @@
 export function Footer() {
   return (
-    <footer className="border-t border-midnight-border bg-midnight-elev/40 pb-24 md:pb-0">
+    <footer className="border-t border-midnight-border bg-midnight-elev/40 pb-24">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-6 md:py-10">
         <div>
           <div className="font-display text-base tracking-[0.2em] neon-orange md:text-lg">

@@ -6,7 +6,9 @@ import {
   getGalleryImages,
   isGalleryStorageConfigured,
 } from "@/lib/gallery";
+import { getReviewCustomers } from "@/lib/reviews";
 import {
+  createReviewCustomerAction,
   deletePhotosAction,
   loginAction,
   logoutAction,
@@ -23,6 +25,7 @@ export const metadata: Metadata = {
 
 type AdminPageProps = {
   searchParams: Promise<{
+    customer?: string;
     deleted?: string;
     error?: string;
     uploaded?: string;
@@ -31,6 +34,8 @@ type AdminPageProps = {
 
 const ERROR_MESSAGES: Record<string, string> = {
   login: "아이디 또는 비밀번호를 확인해주세요.",
+  customer:
+    "회원 정보를 확인해주세요. 이름, 4자 이상 로그인 아이디, 4자 이상 비밀번호가 필요합니다.",
   session: "관리자 로그인이 필요합니다.",
   file: "업로드할 이미지 파일을 다시 확인해주세요. JPG, PNG, WEBP 파일만 가능합니다.",
   delete: "삭제할 사진을 선택해주세요.",
@@ -49,6 +54,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   const storageConfigurationIssues = getGalleryStorageConfigurationIssues();
   const authenticated = await isAdminAuthenticated();
   const galleryImages = authenticated ? await getGalleryImages() : [];
+  const reviewCustomers = authenticated ? await getReviewCustomers() : [];
 
   return (
     <main className="min-h-screen bg-midnight px-5 py-10 text-snow md:px-6 md:py-16">
@@ -139,6 +145,12 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                 </p>
               ) : null}
 
+              {params.customer ? (
+                <p className="mt-4 border border-neon-orange bg-neon-orange/5 px-3 py-2 text-sm font-semibold text-neon-orange">
+                  리뷰 회원을 등록했습니다.
+                </p>
+              ) : null}
+
               {params.error ? (
                 <p className="mt-4 border border-midnight-border bg-midnight-elev px-3 py-2 text-sm text-snow-dim">
                   {ERROR_MESSAGES[params.error] ?? ERROR_MESSAGES.file}
@@ -218,6 +230,113 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                   아직 업로드된 사진이 없습니다.
                 </p>
               )}
+            </div>
+
+            <div className="border border-midnight-border bg-midnight-card p-5 md:col-span-2 md:p-7">
+              <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                <div>
+                  <h2 className="text-lg font-black">리뷰 회원 등록</h2>
+                  <p className="mt-2 text-xs leading-relaxed text-snow-muted">
+                    고객에게 리뷰 작성 링크와 발급한 아이디, 비밀번호를 전달하세요.
+                  </p>
+                </div>
+                <Link
+                  href="/review"
+                  className="text-xs font-semibold text-neon-orange underline underline-offset-4"
+                >
+                  리뷰 작성 페이지
+                </Link>
+              </div>
+
+              <form
+                action={createReviewCustomerAction}
+                className="mt-6 grid gap-3 md:grid-cols-2"
+              >
+                <label className="grid gap-2 text-sm font-semibold">
+                  이름
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    className="border border-midnight-border bg-white px-4 py-3 text-base outline-none focus:border-neon-orange"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-semibold">
+                  연락처
+                  <input
+                    name="phone"
+                    type="tel"
+                    className="border border-midnight-border bg-white px-4 py-3 text-base outline-none focus:border-neon-orange"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-semibold">
+                  로그인 아이디
+                  <input
+                    name="loginId"
+                    type="text"
+                    minLength={4}
+                    required
+                    className="border border-midnight-border bg-white px-4 py-3 text-base outline-none focus:border-neon-orange"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-semibold">
+                  비밀번호
+                  <input
+                    name="password"
+                    type="text"
+                    minLength={4}
+                    required
+                    className="border border-midnight-border bg-white px-4 py-3 text-base outline-none focus:border-neon-orange"
+                  />
+                </label>
+                <label className="grid gap-2 text-sm font-semibold md:col-span-2">
+                  메모
+                  <textarea
+                    name="memo"
+                    rows={3}
+                    className="resize-none border border-midnight-border bg-white px-4 py-3 text-base outline-none focus:border-neon-orange"
+                  />
+                </label>
+                <button
+                  type="submit"
+                  className="bg-snow px-5 py-3 text-sm font-black text-white transition hover:bg-neon-orange md:col-span-2"
+                >
+                  회원 등록하기
+                </button>
+              </form>
+
+              {reviewCustomers.length ? (
+                <div className="mt-6 grid gap-2">
+                  {reviewCustomers.map((customer) => (
+                    <div
+                      key={customer.id}
+                      className="grid gap-2 border border-midnight-border bg-midnight-elev p-4 text-sm md:grid-cols-[1fr_auto]"
+                    >
+                      <div>
+                        <p className="font-black">{customer.name}</p>
+                        <p className="mt-1 text-xs text-snow-muted">
+                          ID: {customer.loginId}
+                          {customer.password
+                            ? ` · PW: ${customer.password}`
+                            : " · PW: 확인 불가"}
+                          {customer.phone ? ` · ${customer.phone}` : ""}
+                        </p>
+                        {customer.memo ? (
+                          <p className="mt-2 text-xs leading-relaxed text-snow-dim">
+                            {customer.memo}
+                          </p>
+                        ) : null}
+                      </div>
+                      <Link
+                        href="/review"
+                        className="self-start border border-midnight-border px-3 py-2 text-xs font-semibold transition hover:border-neon-orange hover:text-neon-orange"
+                      >
+                        링크 열기
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
             </div>
           </section>
         ) : (
