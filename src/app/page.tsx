@@ -15,18 +15,18 @@ import { Programs } from "@/components/Programs";
 import { Reviews } from "@/components/Reviews";
 import { SeoContent } from "@/components/SeoContent";
 import { StructuredData } from "@/components/StructuredData";
-import { getActivePopupAd } from "@/lib/popup-ads";
+import { getPopupAds } from "@/lib/popup-ads";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const popupAd = await getActivePopupAd();
+  const popupAds = await getPopupAds();
 
   return (
     <>
       <StructuredData />
       <Navigation />
-      <PopupAdModal popupAd={popupAd} />
+      <PopupAdModal popupAds={popupAds} />
       <main className="flex-1">
         <Hero />
         <Marquee />

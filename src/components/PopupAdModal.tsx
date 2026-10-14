@@ -15,24 +15,41 @@ const getTodayKey = () => {
   return `${year}-${month}-${date}`;
 };
 
-export function PopupAdModal({ popupAd }: { popupAd: PopupAd | null }) {
+export function PopupAdModal({ popupAds }: { popupAds: PopupAd[] }) {
   const [open, setOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (!popupAd) {
+    if (!popupAds.length) {
       return;
     }
 
     const hiddenDate = window.localStorage.getItem(STORAGE_KEY);
 
     if (hiddenDate !== getTodayKey()) {
+      setCurrentIndex(0);
       setOpen(true);
     }
-  }, [popupAd]);
+  }, [popupAds.length]);
 
-  if (!popupAd || !open) {
+  if (!popupAds.length || !open) {
     return null;
   }
+
+  const currentPopupAd = popupAds[currentIndex];
+
+  if (!currentPopupAd) {
+    return null;
+  }
+
+  const closeCurrent = () => {
+    if (currentIndex < popupAds.length - 1) {
+      setCurrentIndex((index) => index + 1);
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const closeForToday = () => {
     window.localStorage.setItem(STORAGE_KEY, getTodayKey());
@@ -47,9 +64,14 @@ export function PopupAdModal({ popupAd }: { popupAd: PopupAd | null }) {
       aria-label="팝업 광고"
     >
       <div className="w-full max-w-[520px] overflow-hidden border border-midnight-border bg-midnight-card shadow-2xl">
+        {popupAds.length > 1 ? (
+          <div className="border-b border-midnight-border bg-midnight-card px-4 py-2 text-right text-xs font-semibold text-snow-muted">
+            {currentIndex + 1} / {popupAds.length}
+          </div>
+        ) : null}
         <div className="relative max-h-[72vh] min-h-[260px] bg-midnight-elev">
           <Image
-            src={popupAd.imageUrl}
+            src={currentPopupAd.imageUrl}
             alt="MAD INTER SKI SCHOOL 안내 팝업"
             width={1040}
             height={1300}
@@ -60,7 +82,7 @@ export function PopupAdModal({ popupAd }: { popupAd: PopupAd | null }) {
         <div className="grid grid-cols-2 border-t border-midnight-border">
           <button
             type="button"
-            onClick={() => setOpen(false)}
+            onClick={closeCurrent}
             className="min-h-12 border-r border-midnight-border px-4 py-3 text-sm font-black text-snow transition hover:bg-midnight-elev"
           >
             닫기
