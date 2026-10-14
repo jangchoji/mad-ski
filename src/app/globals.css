@@ -132,6 +132,19 @@ body {
   width: 100%;
 }
 
+.gallery-marquee {
+  width: 100%;
+}
+
+.gallery-marquee-track {
+  animation: marquee 34s linear infinite;
+  will-change: transform;
+}
+
+.gallery-marquee:hover .gallery-marquee-track {
+  animation-play-state: paused;
+}
+
 .review-marquee-track {
   animation: marquee 42s linear infinite;
   will-change: transform;
@@ -148,13 +161,25 @@ body {
   -webkit-line-clamp: 8;
 }
 
+.notice-card-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+}
+
 @media (min-width: 768px) {
   .review-card-text {
     -webkit-line-clamp: 9;
   }
+
+  .notice-card-text {
+    -webkit-line-clamp: 8;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .gallery-marquee-track,
   .review-marquee-track {
     animation: none;
   }

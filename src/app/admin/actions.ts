@@ -15,6 +15,13 @@ import {
   GalleryUploadError,
   isGalleryStorageConfigured,
 } from "@/lib/gallery";
+import {
+  createNotice,
+  deleteNotices,
+  NoticeError,
+  updateNotice,
+} from "@/lib/notices";
+import { createPopupAd, deletePopupAds, PopupAdError } from "@/lib/popup-ads";
 import { createReviewCustomer, ReviewError } from "@/lib/reviews";
 
 const MAX_FILE_SIZE = 12 * 1024 * 1024;
@@ -134,7 +141,7 @@ export async function uploadPhotosAction(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin");
-  redirect(`/admin?uploaded=${uploaded}`);
+  redirect(`/admin?tab=gallery&uploaded=${uploaded}`);
 }
 
 export async function deletePhotosAction(formData: FormData) {
@@ -168,7 +175,254 @@ export async function deletePhotosAction(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin");
-  redirect(`/admin?deleted=${deleted}`);
+  redirect(`/admin?tab=gallery&deleted=${deleted}`);
+}
+
+export async function createNoticeAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  if (!isGalleryStorageConfigured()) {
+    redirect("/admin?error=storage");
+  }
+
+  const title = String(formData.get("title") ?? "").trim().slice(0, 80);
+  const content = String(formData.get("content") ?? "").trim().slice(0, 2000);
+  const imageFile = formData.get("image");
+
+  if (
+    !title ||
+    !content ||
+    imageFile === null ||
+    !isFile(imageFile) ||
+    !imageFile.size
+  ) {
+    redirect("/admin?error=notice");
+  }
+
+  if (!MIME_TO_EXTENSION[imageFile.type] || imageFile.size > MAX_FILE_SIZE) {
+    redirect("/admin?error=file");
+  }
+
+  try {
+    const extension = MIME_TO_EXTENSION[imageFile.type];
+
+    if (!extension) {
+      throw new NoticeError("validation");
+    }
+
+    const image = {
+      bytes: Buffer.from(await imageFile.arrayBuffer()),
+      contentType: imageFile.type,
+      extension,
+      originalName: [
+        sanitizeName(imageFile.name),
+        randomBytes(4).toString("hex"),
+      ].join("-"),
+    };
+
+    await createNotice({
+      title,
+      content,
+      image,
+    });
+  } catch (error) {
+    console.error("Notice creation failed", error);
+    const failedStep =
+      error instanceof NoticeError ? error.step : "notice";
+    redirect(`/admin?error=${failedStep}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/notice");
+  revalidatePath("/admin");
+  redirect("/admin?tab=notice&notice=created");
+}
+
+export async function updateNoticeAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  if (!isGalleryStorageConfigured()) {
+    redirect("/admin?error=storage");
+  }
+
+  const id = String(formData.get("noticeId") ?? "").trim();
+  const title = String(formData.get("title") ?? "").trim().slice(0, 80);
+  const content = String(formData.get("content") ?? "").trim().slice(0, 2000);
+  const imageFile = formData.get("image");
+
+  if (!id || !title || !content) {
+    redirect("/admin?error=notice");
+  }
+
+  let image:
+    | {
+        bytes: Buffer;
+        contentType: string;
+        extension: string;
+        originalName: string;
+      }
+    | undefined;
+
+  if (imageFile !== null && isFile(imageFile) && imageFile.size > 0) {
+    if (!MIME_TO_EXTENSION[imageFile.type] || imageFile.size > MAX_FILE_SIZE) {
+      redirect("/admin?error=file");
+    }
+
+    const extension = MIME_TO_EXTENSION[imageFile.type];
+
+    if (!extension) {
+      redirect("/admin?error=file");
+    }
+
+    image = {
+      bytes: Buffer.from(await imageFile.arrayBuffer()),
+      contentType: imageFile.type,
+      extension,
+      originalName: [
+        sanitizeName(imageFile.name),
+        randomBytes(4).toString("hex"),
+      ].join("-"),
+    };
+  }
+
+  try {
+    await updateNotice({
+      id,
+      title,
+      content,
+      image,
+    });
+  } catch (error) {
+    console.error("Notice update failed", error);
+    const failedStep =
+      error instanceof NoticeError ? error.step : "notice";
+    redirect(`/admin?error=${failedStep}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/notice");
+  revalidatePath("/admin");
+  redirect(`/admin?tab=notice&noticeId=${id}&notice=updated`);
+}
+
+export async function deleteNoticesAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  if (!isGalleryStorageConfigured()) {
+    redirect("/admin?error=storage");
+  }
+
+  const ids = formData
+    .getAll("noticeIds")
+    .map((id) => String(id))
+    .filter(Boolean);
+
+  if (!ids.length) {
+    redirect("/admin?error=noticeDelete");
+  }
+
+  let deleted = 0;
+
+  try {
+    deleted = await deleteNotices(ids);
+  } catch (error) {
+    console.error("Notice delete failed", error);
+    const failedStep =
+      error instanceof NoticeError ? error.step : "noticeDelete";
+    redirect(`/admin?error=${failedStep}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/notice");
+  revalidatePath("/admin");
+  redirect(`/admin?tab=notice&noticeDeleted=${deleted}`);
+}
+
+export async function createPopupAdAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  if (!isGalleryStorageConfigured()) {
+    redirect("/admin?error=storage");
+  }
+
+  const imageFile = formData.get("image");
+
+  if (imageFile === null || !isFile(imageFile) || !imageFile.size) {
+    redirect("/admin?error=popup");
+  }
+
+  if (!MIME_TO_EXTENSION[imageFile.type] || imageFile.size > MAX_FILE_SIZE) {
+    redirect("/admin?error=file");
+  }
+
+  try {
+    const extension = MIME_TO_EXTENSION[imageFile.type];
+
+    if (!extension) {
+      throw new PopupAdError("validation");
+    }
+
+    await createPopupAd({
+      bytes: Buffer.from(await imageFile.arrayBuffer()),
+      contentType: imageFile.type,
+      extension,
+      originalName: [
+        sanitizeName(imageFile.name),
+        randomBytes(4).toString("hex"),
+      ].join("-"),
+    });
+  } catch (error) {
+    console.error("Popup ad creation failed", error);
+    const failedStep =
+      error instanceof PopupAdError ? error.step : "popup";
+    redirect(`/admin?error=${failedStep}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  redirect("/admin?tab=popup&popup=created");
+}
+
+export async function deletePopupAdsAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  if (!isGalleryStorageConfigured()) {
+    redirect("/admin?error=storage");
+  }
+
+  const ids = formData
+    .getAll("popupIds")
+    .map((id) => String(id))
+    .filter(Boolean);
+
+  if (!ids.length) {
+    redirect("/admin?error=popupDelete");
+  }
+
+  let deleted = 0;
+
+  try {
+    deleted = await deletePopupAds(ids);
+  } catch (error) {
+    console.error("Popup ad delete failed", error);
+    const failedStep =
+      error instanceof PopupAdError ? error.step : "popupDelete";
+    redirect(`/admin?error=${failedStep}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  redirect(`/admin?tab=popup&popupDeleted=${deleted}`);
 }
 
 export async function createReviewCustomerAction(formData: FormData) {
@@ -202,5 +456,5 @@ export async function createReviewCustomerAction(formData: FormData) {
   }
 
   revalidatePath("/admin");
-  redirect("/admin?customer=created");
+  redirect("/admin?tab=reviews&customer=created");
 }

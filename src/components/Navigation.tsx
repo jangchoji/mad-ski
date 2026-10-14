@@ -2,10 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 
 const NAV_ITEMS = [
-  { href: "/#about", label: "About", mobileLabel: "소개" },
   { href: "/#courses", label: "Curriculum", mobileLabel: "과정" },
+  { href: "/#director", label: "Coaches", mobileLabel: "코치진" },
   { href: "/#reviews", label: "Reviews", mobileLabel: "후기" },
   { href: "/#contact", label: "Contact", mobileLabel: "문의" },
+  { href: "/#notice", label: "Notice", mobileLabel: "공지" },
 ];
 
 export function Navigation() {

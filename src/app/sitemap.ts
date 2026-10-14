@@ -24,5 +24,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
       images: [SITE.image, SITE.logo],
     },
+    {
+      url: `${SITE_URL}/gallery`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+      images: [SITE.image, SITE.logo],
+    },
+    {
+      url: `${SITE_URL}/notice`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+      images: [SITE.image, SITE.logo],
+    },
   ];
 }

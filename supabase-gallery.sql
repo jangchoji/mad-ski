@@ -64,3 +64,45 @@ on public.customer_reviews
 for select
 to anon, authenticated
 using (is_visible = true);
+
+create table if not exists public.notices (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  content text not null,
+  image_key text,
+  image_url text,
+  is_visible boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists notices_visible_created_at_idx
+on public.notices (is_visible, created_at desc);
+
+alter table public.notices enable row level security;
+
+drop policy if exists "Public notices are readable" on public.notices;
+create policy "Public notices are readable"
+on public.notices
+for select
+to anon, authenticated
+using (is_visible = true);
+
+create table if not exists public.popup_ads (
+  id uuid primary key default gen_random_uuid(),
+  image_key text not null,
+  image_url text not null,
+  is_visible boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists popup_ads_visible_created_at_idx
+on public.popup_ads (is_visible, created_at desc);
+
+alter table public.popup_ads enable row level security;
+
+drop policy if exists "Public popup ads are readable" on public.popup_ads;
+create policy "Public popup ads are readable"
+on public.popup_ads
+for select
+to anon, authenticated
+using (is_visible = true);

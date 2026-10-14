@@ -9,6 +9,7 @@ export const SITE = {
   phone: "010-2007-2883",
   telephone: "+82-10-2007-2883",
   kakao: "mvp8917",
+  kakaoUrl: "http://pf.kakao.com/_chPaX/chat",
   instagram: "https://instagram.com/mad_skiii",
   youtube: "https://www.youtube.com/channel/UCZRwm9Z2AtsQqPTsI6_slwQ",
   reservationUrl: "https://naver.me/Gy3QiTX4",

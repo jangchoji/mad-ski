@@ -13,8 +13,8 @@ const CHANNELS = [
   },
   {
     label: "KAKAOTALK",
-    value: "mvp8917",
-    href: "https://open.kakao.com/o/mvp8917",
+    value: SITE.kakao,
+    href: SITE.kakaoUrl,
   },
   {
     label: "INSTAGRAM",
