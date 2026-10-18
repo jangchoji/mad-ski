@@ -202,6 +202,11 @@ export const PARTNERS: Partner[] = [
     url: "https://www.smithkorea.co.kr/",
   },
   {
+    name: "FEET KOREA",
+    displayName: "FEET KOREA",
+    url: "https://www.feetkorea.com/",
+  },
+  {
     name: "소담송하",
     displayName: "소담송하",
     url: "https://naver.me/GuDQNArz",

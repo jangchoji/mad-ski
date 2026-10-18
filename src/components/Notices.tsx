@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   getPublishedNoticeById,
@@ -146,14 +145,12 @@ export async function NoticeDetail({ id }: { id: string }) {
       </header>
 
       {notice.imageUrl ? (
-        <figure className="relative mt-8 aspect-4/3 overflow-hidden border border-midnight-border bg-midnight-elev md:mt-10">
-          <Image
+        <figure className="mt-8 border border-midnight-border bg-midnight-elev md:mt-10">
+          <img
             src={notice.imageUrl}
             alt={`${notice.title} 공지 사진`}
-            fill
-            sizes="(min-width: 768px) 960px, 100vw"
-            className="object-cover"
-            priority
+            className="block h-auto w-full"
+            fetchPriority="high"
           />
         </figure>
       ) : null}

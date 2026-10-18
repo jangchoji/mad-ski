@@ -17,7 +17,7 @@ export function MobileCta() {
           href={SITE.reservationUrl}
           target="_blank"
           rel="noreferrer"
-          className="flex h-13 items-center justify-between gap-2 bg-black px-5 py-4 text-sm font-bold uppercase tracking-wider text-white active:scale-[0.99] md:px-6 md:text-base"
+          className="flex h-13 items-center justify-center gap-2 bg-black px-5 py-4 text-sm font-bold uppercase tracking-wider text-white active:scale-[0.99] md:px-6 md:text-base"
         >
           <span>강습 예약하기</span>
           <span className="text-neon-orange" aria-hidden>
