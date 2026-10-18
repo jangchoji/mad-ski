@@ -18,10 +18,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  applicationName: SITE.name,
+  applicationName: SITE.koreanName,
   title: {
-    default: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
-    template: `%s | ${SITE.name}`,
+    default: SITE.title,
+    template: `%s | ${SITE.koreanName}`,
   },
   description: SITE.description,
   keywords: SITE.keywords,
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: SITE_URL,
-    siteName: SITE.name,
-    title: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
+    siteName: SITE.koreanName,
+    title: SITE.title,
     description: SITE.description,
     images: [
       {
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.title} | 제대로 배우면, 스키가 달라집니다`,
+    title: SITE.title,
     description: SITE.description,
     images: ["/twitter-image"],
   },

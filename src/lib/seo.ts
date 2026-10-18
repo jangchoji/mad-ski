@@ -3,15 +3,15 @@ import { SITE, SITE_URL } from "@/lib/site";
 
 export function pageMetadata(path: string, title: string, description: string, image = SITE.ogImage): Metadata {
   const url = new URL(path, SITE_URL).toString();
-  const shareTitle = `${title} | ${SITE.name}`;
+  const shareTitle = path === "/" ? SITE.title : `${title} | ${SITE.koreanName}`;
   return {
-    title,
+    title: { absolute: shareTitle },
     description,
     alternates: { canonical: url },
     openGraph: {
       type: "website",
       locale: "ko_KR",
-      siteName: SITE.name,
+      siteName: SITE.koreanName,
       url,
       title: shareTitle,
       description,

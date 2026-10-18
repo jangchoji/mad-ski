@@ -2,8 +2,9 @@ export const SITE_URL = "https://www.madski.co.kr";
 
 export const SITE = {
   name: "MAD INTER SKI SCHOOL",
+  koreanName: "매드인터스키스쿨",
   legalName: "MAD INTER SKI SCHOOL",
-  title: "전문 스키 강습 MAD INTER SKI in 비발디파크",
+  title: "매드인터스키스쿨 in 비발디파크",
   description:
     "MAD INTER SKI SCHOOL은 대명 소노벨 비발디파크에서 진행하는 자세교정 전문 스키 강습팀입니다. 스키어마다 다른 신체 조건과 운동 경험, 현재 수준을 살펴 초급부터 상급까지 체계적인 커리큘럼으로 지도합니다.",
   phone: "010-2007-2883",
