@@ -113,7 +113,8 @@ export function DirectorSummary() {
   );
 }
 
-export function Director() {
+export function Director({ asPage = false }: { asPage?: boolean }) {
+  const Heading = asPage ? "h1" : "h2";
   const remainingDirectorHistory = [
     ...DIRECTOR_PROFILE.career,
     ...DIRECTOR_PROFILE.credentials,
@@ -137,9 +138,9 @@ export function Director() {
             <span className="text-[10px] font-semibold tracking-[0.4em] text-neon-orange md:text-xs">
               DIRECTOR
             </span>
-            <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
+            <Heading className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
               {DIRECTOR_PROFILE.name} {DIRECTOR_PROFILE.title}
-            </h2>
+            </Heading>
           </div>
         </div>
 

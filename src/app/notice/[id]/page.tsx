@@ -6,7 +6,7 @@ import { MobileCta } from "@/components/MobileCta";
 import { Navigation } from "@/components/Navigation";
 import { NoticeDetail } from "@/components/Notices";
 import { getPublishedNoticeById } from "@/lib/notices";
-import { SITE } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -24,15 +24,7 @@ export async function generateMetadata({
 
   const description = notice.content.replace(/\s+/g, " ").slice(0, 120);
 
-  return {
-    title: notice.title,
-    description,
-    openGraph: {
-      title: `${notice.title} | ${SITE.name}`,
-      description,
-      images: notice.imageUrl ? [notice.imageUrl] : [SITE.ogImage],
-    },
-  };
+  return pageMetadata(`/notice/${encodeURIComponent(id)}`, notice.title, description, notice.imageUrl ?? undefined);
 }
 
 export default async function NoticeDetailPage({

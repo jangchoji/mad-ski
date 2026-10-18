@@ -1,3 +1,4 @@
+import Link from "next/link";
 const PROGRAMS = [
   {
     tag: "감독반",
@@ -38,7 +39,7 @@ const PROGRAMS = [
   },
 ];
 
-export function Programs() {
+export function Programs({ showLinks = true }: { showLinks?: boolean }) {
   return (
     <section
       id="programs"
@@ -114,6 +115,10 @@ export function Programs() {
         ))}
       </div>
 
+      {showLinks && <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm font-semibold text-neon-orange">
+        <Link href="/pricing" className="underline underline-offset-4">요금·예약 조건 자세히 보기 →</Link>
+        <Link href="/lessons/junior" className="underline underline-offset-4">어린이·주니어 강습 안내 →</Link>
+      </div>}
       <p className="mt-8 text-center text-[11px] text-snow-muted md:mt-10 md:text-xs">
         * 1인 요금 기준. 그룹 인원 미달 시 추가 요금 발생.
       </p>

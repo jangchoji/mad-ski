@@ -79,11 +79,11 @@ export function About() {
           <span className="text-[10px] font-semibold tracking-[0.4em] text-neon-orange md:text-xs">
             ABOUT
           </span>
-          <h2 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
+          <h1 className="mt-3 text-3xl font-black leading-[1.15] text-snow md:mt-4 md:text-5xl">
             제대로 배우면,
             <br />
             스키가 달라집니다
-          </h2>
+          </h1>
           <div className="mt-5 space-y-4 text-sm leading-relaxed text-snow-muted md:mt-6 md:text-base">
             <p>
               <strong className="text-snow">매드인터스키스쿨</strong>은

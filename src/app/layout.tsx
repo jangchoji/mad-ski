@@ -28,9 +28,6 @@ export const metadata: Metadata = {
   authors: [{ name: SITE.name, url: SITE_URL }],
   creator: SITE.name,
   publisher: SITE.name,
-  alternates: {
-    canonical: "/",
-  },
   robots: {
     index: true,
     follow: true,
@@ -65,12 +62,11 @@ export const metadata: Metadata = {
     description: SITE.description,
     images: ["/twitter-image"],
   },
-  other: {
-    thumbnail: SITE.ogImage,
-    "og:image": SITE.ogImage,
-    "og:image:secure_url": SITE.ogImage,
-    "og:image:type": "image/png",
-    "twitter:image": `${SITE_URL}/twitter-image`,
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+    other: process.env.NAVER_SITE_VERIFICATION
+      ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION }
+      : undefined,
   },
   category: "sports education",
 };

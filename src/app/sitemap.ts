@@ -1,42 +1,17 @@
 import type { MetadataRoute } from "next";
+import { getPublishedNoticeIds } from "@/lib/notices";
 import { SITE, SITE_URL } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const noticeIds = await getPublishedNoticeIds();
+  // Omit lastModified until actual edit timestamps are available.
   return [
-    {
-      url: SITE_URL,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-      images: [SITE.image, SITE.logo, SITE.ogImage],
-    },
-    {
-      url: `${SITE_URL}/about`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-      images: [SITE.image, SITE.logo],
-    },
-    {
-      url: `${SITE_URL}/director`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-      images: [SITE.image, SITE.logo],
-    },
-    {
-      url: `${SITE_URL}/gallery`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-      images: [SITE.image, SITE.logo],
-    },
-    {
-      url: `${SITE_URL}/notice`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-      images: [SITE.image, SITE.logo],
-    },
+    ...["", "/about", "/director", "/gallery", "/notice", "/lessons/junior", "/pricing"].map((path) => ({
+      url: `${SITE_URL}${path}`,
+      images: path ? [SITE.image] : [SITE.image, SITE.logo],
+    })),
+    ...noticeIds.map((id) => ({ url: `${SITE_URL}/notice/${encodeURIComponent(id)}` })),
   ];
 }

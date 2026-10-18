@@ -1,3 +1,5 @@
+import { pageMetadata } from "@/lib/seo";
+import { SITE } from "@/lib/site";
 import { AboutSummary } from "@/components/About";
 import { Contact } from "@/components/Contact";
 import { Courses } from "@/components/Courses";
@@ -16,6 +18,8 @@ import { Reviews } from "@/components/Reviews";
 import { SeoContent } from "@/components/SeoContent";
 import { StructuredData } from "@/components/StructuredData";
 import { getPopupAds } from "@/lib/popup-ads";
+
+export const metadata = pageMetadata("/", SITE.title, SITE.description);
 
 export const dynamic = "force-dynamic";
 

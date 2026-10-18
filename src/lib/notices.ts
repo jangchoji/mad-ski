@@ -347,3 +347,22 @@ export const getPublishedNoticeById = async (
 
   return mapNotice(data as NoticeRow);
 };
+
+// Fetch all public IDs in pages; the homepage query intentionally returns only six notices.
+export const getPublishedNoticeIds = async (): Promise<string[]> => {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = getSupabaseAdmin();
+  const ids: string[] = [];
+  const pageSize = 500;
+  for (let offset = 0; ; offset += pageSize) {
+    const { data, error } = await supabase
+      .from(NOTICES_TABLE)
+      .select("id")
+      .eq("is_visible", true)
+      .order("id", { ascending: true })
+      .range(offset, offset + pageSize - 1);
+    if (error) throw new NoticeError("supabase", error);
+    ids.push(...data.map((notice) => notice.id));
+    if (data.length < pageSize) return ids;
+  }
+};
