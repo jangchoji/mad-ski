@@ -95,6 +95,8 @@ create table if not exists public.popup_ads (
   created_at timestamptz not null default now()
 );
 
+alter table public.popup_ads add column if not exists link_url text;
+
 create index if not exists popup_ads_visible_created_at_idx
 on public.popup_ads (is_visible, created_at desc);
 

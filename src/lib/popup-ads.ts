@@ -12,6 +12,7 @@ type PopupAdRow = {
   id: string;
   image_key: string;
   image_url: string;
+  link_url?: string | null;
   created_at: string;
 };
 
@@ -19,12 +20,13 @@ export type PopupAd = {
   id: string;
   imageKey: string;
   imageUrl: string;
+  linkUrl: string | null;
   createdAt: number;
 };
 
 export class PopupAdError extends Error {
   constructor(
-    public readonly step: "r2" | "supabase" | "validation",
+    public readonly step: "r2" | "supabase" | "validation" | "popupLink",
     cause?: unknown,
   ) {
     super(`Popup ad failed at ${step}`);
@@ -109,8 +111,32 @@ const mapPopupAd = (ad: PopupAdRow): PopupAd => ({
   id: ad.id,
   imageKey: ad.image_key,
   imageUrl: ad.image_url,
+  linkUrl: normalizePopupLink(ad.link_url),
   createdAt: new Date(ad.created_at).getTime(),
 });
+
+export const normalizePopupLink = (value?: string | null): string | null => {
+  const trimmed = value?.trim();
+
+  if (!trimmed) {
+    return null;
+  }
+
+  try {
+    const hasScheme = /^[a-z][a-z\d+.-]*:/i.test(trimmed);
+    const url = new URL(
+      hasScheme ? trimmed : `https://${trimmed.replace(/^\/\//, "")}`,
+    );
+
+    if (!["https:", "http:"].includes(url.protocol) || url.username || url.password) {
+      throw new Error("Invalid popup link");
+    }
+
+    return url.href;
+  } catch {
+    throw new PopupAdError("popupLink");
+  }
+};
 
 const deletePopupImage = async (imageKey: string) => {
   try {
@@ -125,12 +151,16 @@ const deletePopupImage = async (imageKey: string) => {
   }
 };
 
-export const createPopupAd = async (image: {
-  bytes: Buffer;
-  contentType: string;
-  extension: string;
-  originalName: string;
-}) => {
+export const createPopupAd = async (
+  image: {
+    bytes: Buffer;
+    contentType: string;
+    extension: string;
+    originalName: string;
+  },
+  link?: string | null,
+) => {
+  const linkUrl = normalizePopupLink(link);
   if (!image.bytes.length) {
     throw new PopupAdError("validation");
   }
@@ -156,10 +186,29 @@ export const createPopupAd = async (image: {
   const { error } = await supabase.from(POPUP_ADS_TABLE).insert({
     image_key: imageKey,
     image_url: getR2PublicUrl(imageKey),
+    link_url: linkUrl,
   });
 
   if (error) {
     await deletePopupImage(imageKey);
+    throw new PopupAdError("supabase", error);
+  }
+};
+
+export const updatePopupAdLink = async (id: string, link: string | null) => {
+  if (!id) {
+    throw new PopupAdError("validation");
+  }
+
+  const linkUrl = normalizePopupLink(link);
+  const { data, error } = await getSupabaseAdmin()
+    .from(POPUP_ADS_TABLE)
+    .update({ link_url: linkUrl })
+    .eq("id", id)
+    .select("id")
+    .maybeSingle();
+
+  if (error || !data) {
     throw new PopupAdError("supabase", error);
   }
 };
@@ -206,7 +255,7 @@ export const getPopupAds = async (limit = 12): Promise<PopupAd[]> => {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from(POPUP_ADS_TABLE)
-    .select("id,image_key,image_url,created_at")
+    .select("*")
     .eq("is_visible", true)
     .order("created_at", { ascending: false })
     .limit(limit);

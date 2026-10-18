@@ -1,4 +1,4 @@
-export const SITE_URL = "https://www.mad-ski.co.kr";
+export const SITE_URL = "https://www.madski.co.kr";
 
 export const SITE = {
   name: "MAD INTER SKI SCHOOL",

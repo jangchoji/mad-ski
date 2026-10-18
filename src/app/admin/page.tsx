@@ -19,6 +19,7 @@ import {
   loginAction,
   logoutAction,
   updateNoticeAction,
+  updatePopupAdLinkAction,
   uploadPhotosAction,
 } from "./actions";
 
@@ -66,6 +67,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   noticeDelete: "삭제할 공지를 선택해주세요.",
   popup: "팝업 이미지를 선택해주세요.",
   popupDelete: "삭제할 팝업 이미지를 선택해주세요.",
+  popupLink: "바로가기 링크 주소를 확인해주세요.",
   storage: "Supabase DB와 Cloudflare R2 환경 변수를 먼저 설정해주세요.",
   upload:
     "업로드 중 오류가 발생했습니다. R2 권한, Supabase 테이블, 환경변수를 확인해주세요.",
@@ -145,7 +147,9 @@ function StatusMessages({
       ) : null}
       {params.popup ? (
         <p className="border border-neon-orange bg-neon-orange/5 px-3 py-2 text-sm font-semibold text-neon-orange">
-          팝업 이미지를 등록했습니다.
+          {params.popup === "updated"
+            ? "팝업 바로가기 링크를 저장했습니다."
+            : "팝업 이미지를 등록했습니다."}
         </p>
       ) : null}
       {params.popupDeleted ? (
@@ -388,7 +392,7 @@ function PopupPanel({ popupAds }: { popupAds: PopupAd[] }) {
     <section className="border border-midnight-border bg-midnight-card p-5 md:p-7">
       <h2 className="text-lg font-black">팝업 광고</h2>
       <p className="mt-2 text-xs leading-relaxed text-snow-muted">
-        최신 등록 이미지 1개가 메인 페이지 진입 시 팝업으로 표시됩니다.
+        등록된 이미지가 최신순으로 메인 페이지에 표시됩니다. 바로가기 링크를 입력하면 이미지 클릭 시 새 탭으로 이동합니다.
       </p>
 
       <form action={createPopupAdAction} className="mt-6 grid gap-4">
@@ -401,6 +405,19 @@ function PopupPanel({ popupAds }: { popupAds: PopupAd[] }) {
             required
             className="w-full border border-midnight-border bg-white p-3 text-sm file:mr-4 file:border-0 file:bg-neon-orange file:px-4 file:py-2 file:text-sm file:font-bold file:text-white"
           />
+        </label>
+        <label className="grid gap-2 text-sm font-semibold">
+          바로가기 링크 (선택)
+          <input
+            name="linkUrl"
+            type="text"
+            inputMode="url"
+            placeholder="https://example.com/"
+            className="w-full border border-midnight-border bg-white p-3 text-sm"
+          />
+          <span className="text-xs font-normal text-snow-muted">
+            https:// 없이 입력해도 됩니다. 비워두면 이미지 클릭 시 이동하지 않습니다.
+          </span>
         </label>
         <button
           type="submit"
@@ -442,6 +459,29 @@ function PopupPanel({ popupAds }: { popupAds: PopupAd[] }) {
                   </button>
                 </form>
               </div>
+              <form action={updatePopupAdLinkAction} className="mt-4 grid gap-2">
+                <input type="hidden" name="popupId" value={popupAd.id} />
+                <label className="grid gap-2 text-xs font-semibold">
+                  바로가기 링크 (선택)
+                  <input
+                    name="linkUrl"
+                    type="text"
+                    inputMode="url"
+                    defaultValue={popupAd.linkUrl ?? ""}
+                    placeholder="https://example.com/"
+                    className="min-w-0 w-full border border-midnight-border bg-white p-2 text-sm"
+                  />
+                </label>
+                <p className="text-xs text-snow-muted">
+                  주소를 비우고 저장하면 링크가 제거됩니다.
+                </p>
+                <button
+                  type="submit"
+                  className="border border-midnight-border px-3 py-2 text-xs font-black text-snow transition hover:border-neon-orange hover:bg-neon-orange hover:text-white"
+                >
+                  링크 저장
+                </button>
+              </form>
             </article>
           ))}
         </div>

@@ -21,7 +21,12 @@ import {
   NoticeError,
   updateNotice,
 } from "@/lib/notices";
-import { createPopupAd, deletePopupAds, PopupAdError } from "@/lib/popup-ads";
+import {
+  createPopupAd,
+  deletePopupAds,
+  PopupAdError,
+  updatePopupAdLink,
+} from "@/lib/popup-ads";
 import { createReviewCustomer, ReviewError } from "@/lib/reviews";
 
 const MAX_FILE_SIZE = 12 * 1024 * 1024;
@@ -370,25 +375,49 @@ export async function createPopupAdAction(formData: FormData) {
       throw new PopupAdError("validation");
     }
 
-    await createPopupAd({
-      bytes: Buffer.from(await imageFile.arrayBuffer()),
-      contentType: imageFile.type,
-      extension,
-      originalName: [
-        sanitizeName(imageFile.name),
-        randomBytes(4).toString("hex"),
-      ].join("-"),
-    });
+    await createPopupAd(
+      {
+        bytes: Buffer.from(await imageFile.arrayBuffer()),
+        contentType: imageFile.type,
+        extension,
+        originalName: [
+          sanitizeName(imageFile.name),
+          randomBytes(4).toString("hex"),
+        ].join("-"),
+      },
+      String(formData.get("linkUrl") ?? ""),
+    );
   } catch (error) {
     console.error("Popup ad creation failed", error);
     const failedStep =
       error instanceof PopupAdError ? error.step : "popup";
-    redirect(`/admin?error=${failedStep}`);
+    redirect(`/admin?tab=popup&error=${failedStep}`);
   }
 
   revalidatePath("/");
   revalidatePath("/admin");
   redirect("/admin?tab=popup&popup=created");
+}
+
+export async function updatePopupAdLinkAction(formData: FormData) {
+  if (!(await isAdminAuthenticated())) {
+    redirect("/admin?error=session");
+  }
+
+  try {
+    await updatePopupAdLink(
+      String(formData.get("popupId") ?? "").trim(),
+      String(formData.get("linkUrl") ?? ""),
+    );
+  } catch (error) {
+    console.error("Popup ad link update failed", error);
+    const failedStep = error instanceof PopupAdError ? error.step : "popup";
+    redirect(`/admin?tab=popup&error=${failedStep}`);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/admin");
+  redirect("/admin?tab=popup&popup=updated");
 }
 
 export async function deletePopupAdsAction(formData: FormData) {
